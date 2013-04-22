@@ -16,7 +16,8 @@ include_directories( ${LIBMONADIC_SOURCE_DIR}/include )
 # Global shit
 file ( GLOB_RECURSE CORE_CPP ./src/*.c* )
 file ( GLOB_RECURSE NODES_CPP ./nodes/*/*.c* )
-add_library( monadic ${FILES_CPP} ${NODES_CPP} )
+
+add_library( monadic ${CORE_CPP} ${NODES_CPP} )
 
 # Link libraries
 target_link_libraries( monadic ${Boost_LIBRARIES} )
