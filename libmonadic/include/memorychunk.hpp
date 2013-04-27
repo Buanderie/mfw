@@ -1,15 +1,15 @@
-#ifndef __MEMORYBLOCK_HPP__
-#define __MEMORYBLOCK_HPP__
+#ifndef __MEMORYCHUNK_HPP__
+#define __MEMORYCHUNK_HPP__
 
 namespace monadic
 {
-    class MemoryBlock
+    class MemoryChunk
     {
     public:
         void* ptr(){ return _data; };
         unsigned int size(){ return _size; };
 
-        virtual ~MemoryBlock();
+        virtual ~MemoryChunk();
     
     protected:
         void *          _data;

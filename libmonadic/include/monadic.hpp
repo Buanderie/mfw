@@ -2,7 +2,7 @@
 #define __MONADIC_HPP__
 
 // INTERNAL
-#include "hostmemoryblock.hpp"
+#include "hostmemorychunk.hpp"
 
 namespace monadic
 {
