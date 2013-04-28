@@ -11,6 +11,13 @@ namespace monadic
 
     class HostStreamBuffer : public StreamBuffer
     {
+        public:
+            HostStreamBuffer();
+            virtual ~HostStreamBuffer();
+    
+        protected:
+
+        private:
 
     };
 

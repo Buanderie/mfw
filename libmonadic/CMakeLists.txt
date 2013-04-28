@@ -34,12 +34,14 @@ ENDIF()
 # Global shit
 IF( USE_CUDA AND CUDA_FOUND )
     file ( GLOB_RECURSE CORE_CPP ./src/*.c* )
-    file ( GLOB_RECURSE NODES_CPP ./nodes/*/*.c* )
-    cuda_add_library( monadic SHARED ${CORE_CPP} ${NODES_CPP} )
+    #file ( GLOB_RECURSE CORE_NODES_CPP ./corenodes/*/*.c* )
+    file ( GLOB_RECURSE OBJECTS_CPP ./objects/*/*.c* )
+    cuda_add_library( monadic SHARED ${CORE_CPP} ${NODES_CPP} ${OBJECTS_CPP} )
 ELSE()
     file ( GLOB_RECURSE CORE_CPP ./src/*.cpp )
-    file ( GLOB_RECURSE NODES_CPP ./nodes/*/*.cpp )
-    add_library( monadic SHARED ${CORE_CPP} ${NODES_CPP} )
+    #file ( GLOB_RECURSE CORE_NODES_CPP ./corenodes/*/*.cpp )
+    file ( GLOB_RECURSE OBJECTS_CPP ./objects/*/*.cpp )
+    add_library( monadic SHARED ${CORE_CPP} ${NODES_CPP} ${OBJECTS_CPP} )
 ENDIF()
 
 

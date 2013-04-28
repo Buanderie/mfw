@@ -10,6 +10,14 @@
 namespace monadic
 {
     HSB::HSB()
+    {
+
+    }
+
+    HSB::~HSB()
+    {
+
+    }
 }
 
 #undef HSB
