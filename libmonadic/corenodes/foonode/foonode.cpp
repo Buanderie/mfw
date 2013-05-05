@@ -26,5 +26,6 @@ namespace monadic
     void FooNode::tick( double dt )
     {
         cout << "FooNode: " << _cpt << endl;
+        _cpt++;
     }
 }

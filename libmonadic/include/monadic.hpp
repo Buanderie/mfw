@@ -4,6 +4,8 @@
 // INTERNAL
 #include "hostmemorychunk.hpp"
 
+#include "foonode/foonode.hpp"
+
 namespace monadic
 {
     void foo();
