@@ -1,5 +1,8 @@
-
 #include "videoinput.hpp"
+
+#include <iostream>
+
+MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
 
     VideoInputNode::VideoInputNode()
     {
@@ -18,5 +21,6 @@
 
     void VideoInputNode::tick( double dt )
     {
-        //cout << "FooNode: " << _cpt << endl;
+        std::cout << "VideoNode: " << _cpt << std::endl;
+	_cpt++;
     }
