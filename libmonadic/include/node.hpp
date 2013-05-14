@@ -38,6 +38,8 @@ namespace monadic
 					                extern "C" void destroyNode(monadic::Node* p) {	\
 						                delete p;				                    \
 					                }                                               \
-                                    extern "C" void getNodeName
+                                    extern "C" char* getNodeName(){                 \
+                                        return strdup(Y);                           \
+                                    }
 
 #endif
