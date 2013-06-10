@@ -3,6 +3,7 @@
 
 // INTERNAL
 #include "hostmemorychunk.hpp"
+#include "nodeentry.hpp"
 
 #include "foonode/foonode.hpp"
 

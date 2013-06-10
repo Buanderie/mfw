@@ -16,7 +16,7 @@ int main ( int argc, char** argv )
 
 //
 // load the triangle library
-    void* triangle = dlopen( argv[1], RTLD_LAZY);
+    /*void* triangle = dlopen( argv[1], RTLD_LAZY);
     if (!triangle) {
         cerr << "Cannot load library: " << dlerror() << '\n';
         return 1;
@@ -29,9 +29,11 @@ int main ( int argc, char** argv )
         cerr << "Cannot load symbols: " << dlerror() << '\n';
         return 1;
     }
-
+    */
+    NodeEntry ne;
+    ne.open( argv[1] );
     // create an instance of the class
-    n = create_triangle();
+    n = ne.getConstructorPtr()();
     n->start();
     // destroy the class
 

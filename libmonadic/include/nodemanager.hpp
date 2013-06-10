@@ -24,7 +24,7 @@ namespace monadic
             monadic::Node* create( std::string nodeName );
 
         private:
-            std::map< std::string, NodeEntry > _entries;
+            std::map< std::string, NodeEntry* > _entries;
     };
 }
 

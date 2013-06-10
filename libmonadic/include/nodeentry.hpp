@@ -12,11 +12,20 @@ namespace monadic
     class NodeEntry
     {
         public:
-            
+            // ctor & dtor
+            NodeEntry( const std::string& dlPath="" );
+            virtual ~NodeEntry();
+   
+            void open( const std::string& dlPath );            
+            createNode_t* getConstructorPtr();
+            destroyNode_t* getDestructorPtr();
+            std::string getNodeName();
+                          
         private:
             std::string     _nodeName;
-            createNode_t    _createFunc;
-            destroyNode_t   _destroyFunc;
+            createNode_t*   _createFuncPtr;
+            destroyNode_t*  _destroyFuncPtr;
+            void*           _dlref;
     };
 }
 
