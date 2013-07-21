@@ -51,6 +51,6 @@ namespace monadic
 						                delete p;				                    \
 					                }                                               \
                                     extern "C" char* getNodeName(){                 \
-                                        return strdup( Y );                         \
-                                    }                                               
+                                        return strdup(Y);                           \
+                                    }
 #endif

@@ -1,6 +1,10 @@
 #ifndef __NODEMANAGER_HPP__
 #define __NODEMANAGER_HPP__
 
+// STL
+#include <string>
+#include <map>
+
 // INTERNAL
 #include "singleton.hpp"
 #include "node.hpp"
@@ -35,6 +39,10 @@ namespace monadic
             
         private:
             std::map< std::string, NodeManagerEntry_t > _nodeRegistry;
+            monadic::Node* create( std::string nodeName );
+
+        private:
+            std::map< std::string, NodeEntry* > _entries;
     };
 }
 

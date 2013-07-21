@@ -17,6 +17,7 @@ using namespace boost::threadpool;
 
 int main ( int argc, char** argv )
 {
+    Node* n;
 
     Application app;
     vector< Node* > nodes;
@@ -31,30 +32,6 @@ int main ( int argc, char** argv )
     popo->setPriority( 25 );
     app.nodes.push_back( popo );
     
-    
-/*
-    for( int k = 0; k < nodes.size(); ++k )
-        nodes[k]->setup();
-*/
-
-/*
-    for( int k = 0; k < nodes.size(); ++k )
-        nodes[k]->start();
-
-    fifo_pool tp(4); // tp is handle to the pool
-    
-    while(1)
-    {
-        
-        for( int k = 0; k < nodes.size(); ++k )
-        {
-            tp.schedule( boost::bind( &Node::tick, nodes[k], 0.0 ) );
-        }
-        boost::xtime t;
-        tp.wait();
-    }
-*/
-
     app.start();
     
     return 0;
