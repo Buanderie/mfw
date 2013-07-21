@@ -22,7 +22,9 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
     void VideoInputNode::tick( double dt )
     {
         std::cout << "VideoNode: " << _cpt << std::endl;
-        std::cout << "POLBAK !!! " << _cpt << std::endl;
 	    _cpt++;
-	    //sleep(1);
+	    		for( int i = 0; i < 1000; ++i )
+		{
+		    double k = exp( rand() / rand() ) * log( 2.0 );
+		}
     }

@@ -24,5 +24,8 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
     {
         std::cout << "Foo: " << _cpt << std::endl;
 		_cpt++;
-		//sleep(1);
+		for( int i = 0; i < 1000; ++i )
+		{
+		    double k = exp( rand() / rand() ) * log( 2.0 );
+		}
     }

@@ -32,7 +32,7 @@ namespace monadic
                     for( int k = 0; k < nodes.size(); ++k )
                     {
                         //_appThreadPool.schedule( boost::bind( &Node::tick, nodes[k], 0.0 ) );
-                        cout << "node " << k << " priority=" << nodes[k]->getPriority() << endl;
+                        //cout << "node " << k << " priority=" << nodes[k]->getPriority() << endl;
                         boost::threadpool::schedule(_appThreadPool, boost::threadpool::prio_task_func( nodes[k]->getPriority(), boost::bind( &Node::tick, nodes[k], 0.0 ) ) );
                     }
                     _appThreadPool.wait(25);

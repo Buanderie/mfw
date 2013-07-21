@@ -34,6 +34,7 @@ namespace monadic
     private:
         boost::thread   _nodeThread;
         std::string     _nodeTypeName;
+        std::string     _nodeName;
         unsigned int    _priority;
     };
 

@@ -26,11 +26,14 @@ int main ( int argc, char** argv )
         return -1;
     
     app.nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
-    //app.nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
-    //app.nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
+    app.nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
+    app.nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
     Node* popo =  NodeManager::getInstance()->create( "Foo" );
-    popo->setPriority( 25 );
+    popo->setPriority( 1 );
     app.nodes.push_back( popo );
+    
+    for( int k = 0; k < app.nodes.size(); ++k )
+        app.nodes[k]->setup();
     
     app.start();
     
