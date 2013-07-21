@@ -1,5 +1,3 @@
-// STL
-#include <string>
 
 // SYSTEM
 #include <dlfcn.h>

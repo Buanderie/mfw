@@ -39,10 +39,7 @@ namespace monadic
             
         private:
             std::map< std::string, NodeManagerEntry_t > _nodeRegistry;
-            monadic::Node* create( std::string nodeName );
 
-        private:
-            std::map< std::string, NodeEntry* > _entries;
     };
 }
 
