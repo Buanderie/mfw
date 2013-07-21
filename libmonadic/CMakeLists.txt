@@ -4,7 +4,7 @@ project (LIBMONADIC)
 # Set custom cmake scripts directory
 set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${LIBMONADIC_SOURCE_DIR}/cmake")
 # Set CMake options
-set( USE_CUDA TRUE CACHE BOOL "Use nVidia CUDA  as GPGPU API")
+set( USE_CUDA TRUE CACHE BOOL "Use nVidia CUDA as GPGPU API")
 option(USE_CLANG "build application with clang" OFF) # OFF is the default
 
 # Configure CLANG
@@ -19,7 +19,7 @@ ENDIF()
 ENDIF()
 
 # Look for Boost
-find_package( Boost COMPONENTS thread REQUIRED )
+find_package( Boost COMPONENTS thread system filesystem REQUIRED )
 if( Boost_FOUND)
     include_directories( ${Boost_INCLUDE_DIR} )
     ADD_DEFINITIONS( "-D__WITHBOOST__" )

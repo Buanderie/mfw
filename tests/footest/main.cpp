@@ -3,46 +3,59 @@
 
 // STL
 #include <iostream>
+#include <vector>
+
+// BOOST
+#include <boost/threadpool.hpp>
 
 // Monadic
 #include <monadic.hpp>
 
 using namespace monadic;
 using namespace std;
+using namespace boost::threadpool;
 
 int main ( int argc, char** argv )
 {
-    Node* n;
 
-//
-// load the triangle library
-    void* triangle = dlopen( argv[1], RTLD_LAZY);
-    if (!triangle) {
-        cerr << "Cannot load library: " << dlerror() << '\n';
-        return 1;
-    }
+    Application app;
+    vector< Node* > nodes;
+    
+    if( ! NodeManager::getInstance()->loadFromDirectory( argv[1] ) )
+        return -1;
+    
+    app.nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
+    //app.nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
+    //app.nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
+    Node* popo =  NodeManager::getInstance()->create( "Foo" );
+    popo->setPriority( 25 );
+    app.nodes.push_back( popo );
+    
+    
+/*
+    for( int k = 0; k < nodes.size(); ++k )
+        nodes[k]->setup();
+*/
 
-    // load the symbols
-    createNode_t* create_triangle = (createNode_t*) dlsym(triangle, "createNode");
-    destroyNode_t* destroy_triangle = (destroyNode_t*) dlsym(triangle, "destroyNode");
-    if (!create_triangle || !destroy_triangle) {
-        cerr << "Cannot load symbols: " << dlerror() << '\n';
-        return 1;
-    }
+/*
+    for( int k = 0; k < nodes.size(); ++k )
+        nodes[k]->start();
 
-    // create an instance of the class
-    n = create_triangle();
-    n->start();
-    // destroy the class
-
+    fifo_pool tp(4); // tp is handle to the pool
+    
     while(1)
     {
-        sleep(1);
+        
+        for( int k = 0; k < nodes.size(); ++k )
+        {
+            tp.schedule( boost::bind( &Node::tick, nodes[k], 0.0 ) );
+        }
+        boost::xtime t;
+        tp.wait();
     }
+*/
 
-	    // unload the triangle library
-        //destroy_triangle(n);
-    //dlclose(triangle);
-
+    app.start();
+    
     return 0;
 }

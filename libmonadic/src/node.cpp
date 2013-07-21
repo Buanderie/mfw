@@ -7,6 +7,7 @@ namespace monadic
 {
     void Node::start()
     {
+        //setup();
         _nodeThread = boost::thread( boost::bind( &Node::run, this ) );
     }
 

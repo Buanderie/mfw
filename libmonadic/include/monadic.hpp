@@ -2,9 +2,9 @@
 #define __MONADIC_HPP__
 
 // INTERNAL
+#include "application.hpp"
+#include "nodemanager.hpp"
 #include "hostmemorychunk.hpp"
-
-#include "foonode/foonode.hpp"
 
 namespace monadic
 {

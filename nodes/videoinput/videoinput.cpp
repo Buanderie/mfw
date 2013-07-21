@@ -6,12 +6,12 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
 
     VideoInputNode::VideoInputNode()
     {
-
+        std::cout << "VideoNode::CTOR" << std::endl;
     }
 
     VideoInputNode::~VideoInputNode()
     {
-
+        std::cout << "VideoNode::DTOR" << std::endl;
     }
 
     void VideoInputNode::setup()
@@ -22,5 +22,7 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
     void VideoInputNode::tick( double dt )
     {
         std::cout << "VideoNode: " << _cpt << std::endl;
-	_cpt++;
+        std::cout << "POLBAK !!! " << _cpt << std::endl;
+	    _cpt++;
+	    //sleep(1);
     }
