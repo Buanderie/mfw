@@ -1,5 +1,6 @@
 
 #include "node.hpp"
+#include <fstream>
 
 class FooNode : public monadic::Node
 {
@@ -12,5 +13,6 @@ class FooNode : public monadic::Node
 
         private:
         int _cpt;
+        std::ofstream pol;
 };
 

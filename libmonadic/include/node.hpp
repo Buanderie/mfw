@@ -2,7 +2,10 @@
 #define __NODE_HPP__
 
 // BOOST
-#include <boost/thread.hpp>
+//#include <boost/thread.hpp>
+
+// STL
+#include <string>
 
 // INTERNAL
 
@@ -10,13 +13,21 @@ namespace monadic
 {
     class Node
     {
+    
     friend class NodeManager;
-        
+    friend class Application;
+
     protected:
                     
     public:
 
-        Node():_priority(1)
+        typedef enum{
+            NODE_INACTIVE=0,
+            NODE_ACTIVE,
+            NODE_BUSY
+        } NodeState;
+
+        Node():_priority(1),_nodeState(NODE_ACTIVE)
         {}
         
         virtual ~Node(){}
@@ -24,18 +35,28 @@ namespace monadic
         void start();
         void stop();
         void run();
+        
         std::string getTypeName(){ return _nodeTypeName; }
+
         unsigned int getPriority(){ return _priority; }
         void setPriority( unsigned int priority ){ _priority = priority; }
         
+        void enable(){ _nodeState = NODE_ACTIVE; }
+        void disable(){ _nodeState = NODE_INACTIVE; }
+
+        NodeState getState(){
+            return _nodeState;
+        }
+
         virtual void setup()=0;
         virtual void tick( double dTime )=0;
 
     private:
-        boost::thread   _nodeThread;
+        void*           _nodeThread;
         std::string     _nodeTypeName;
         std::string     _nodeName;
         unsigned int    _priority;
+        NodeState       _nodeState;
     };
 
     // the types of the node factories

@@ -9,20 +9,30 @@ option(USE_CLANG "build application with clang" OFF) # OFF is the default
 
 # Configure CLANG
 
+# Handle platform specifics
+if ( "${CMAKE_SYSTEM_NAME}" MATCHES "Windows" )
+    ADD_DEFINITIONS( -D__WINDOWS__ )
+elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Linux" )
+    ADD_DEFINITIONS( -D__LINUX__ )
+elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Darwin" )
+    ADD_DEFINITIONS( -D__MACOSX__ )
+endif()
+
 # Look for CUDA
 IF( USE_CUDA )
 find_package( CUDA )
 IF( CUDA_FOUND )
     SET( CUDA_NVCC_FLAGS "-arch;sm_20" )
-    ADD_DEFINITIONS( -DWITH_CUDA )
+    ADD_DEFINITIONS( -D__WITH_CUDA__ )
 ENDIF()
 ENDIF()
 
 # Look for Boost
-find_package( Boost COMPONENTS thread system filesystem REQUIRED )
+find_package( Boost COMPONENTS system filesystem REQUIRED )
 if( Boost_FOUND)
     include_directories( ${Boost_INCLUDE_DIR} )
     ADD_DEFINITIONS( "-D__WITHBOOST__" )
+    message( ${Boost_INCLUDE_DIR} )
 endif()
 
 # Set include directories

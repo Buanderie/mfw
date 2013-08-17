@@ -1,4 +1,16 @@
 
+#ifdef __LINUX__
+    static const char * dlibExtension = ".so";
+#endif
+
+#ifdef __MACOSX__
+    static const char * dlibExtension = ".dylib";
+#endif
+
+#ifdef __WINDOWS__
+    static const char * dlibExtension = ".dll";
+#endif
+
 // SYSTEM
 #include <dlfcn.h>
 
@@ -51,18 +63,18 @@ namespace monadic
     
     int NodeManager::release( const std::string& nodeTypeName )
     {
-        
         return 0;
     }
     
     int NodeManager::loadFromDirectory( const char* nodeModulePath, bool recursiveSearch )
     {
         int retCode = -1;
+
         if( recursiveSearch )
         {
             for ( boost::filesystem::recursive_directory_iterator end, dir(nodeModulePath); dir != end; ++dir )
             {
-                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension().string() == ".so" )
+                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension().string() == dlibExtension )
                 {
                     //cout << *dir << std::endl;
                     retCode += load( dir->path().string().c_str() );
@@ -73,7 +85,7 @@ namespace monadic
         {
             for ( boost::filesystem::directory_iterator end, dir(nodeModulePath); dir != end; ++dir )
             {
-                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension().string() == ".so" )
+                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension().string() == dlibExtension )
                 {
                     //cout << *dir << std::endl;
                     retCode += load( dir->path().string().c_str() );
