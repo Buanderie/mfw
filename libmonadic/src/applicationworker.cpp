@@ -9,10 +9,11 @@ namespace monadic
 		bool ApplicationWorker::run()
 		{
 			int i = 0;
-			while( ! mustStop() )
+			while( 1 )
 			{
 				Node* n = _app->fetchActiveNode();
-				n->tick( _app->getElapsedTime() );
+				double startTime = _app->getElapsedTime();
+				n->tick( startTime );
 				_app->releaseNode(n);
 			}
 			return true;

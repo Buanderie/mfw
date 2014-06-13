@@ -12,10 +12,11 @@ namespace monadic
     }
 
     void Node::run()
-    {
+    {/*
         while(1)
         {
             this->tick( 0.0 );
         }
+    */
     }
 }

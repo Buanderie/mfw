@@ -3,6 +3,9 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
+#include <cstring>
+#include <unistd.h>
 
 using namespace std;
 
@@ -32,8 +35,8 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
 		{
 		    double k = exp( rand() / rand() ) * log( 2.0 );
 		}
-        if( _cpt == 5000 )
-            disable();
-
+        //if( _cpt == 5000 )
+        //    disable();
+        sleep(1);
         pol << _cpt << " - " << setprecision(12) << dt << endl;
     }

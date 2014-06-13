@@ -47,7 +47,7 @@ namespace monadic
         NodeState getState(){
             return _nodeState;
         }
-
+        
         virtual void setup()=0;
         virtual void tick( double dTime )=0;
 

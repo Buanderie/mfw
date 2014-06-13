@@ -1,5 +1,6 @@
 // C
 #include <dlfcn.h>
+#include <unistd.h>
 
 // STL
 #include <iostream>
@@ -25,9 +26,14 @@ int main ( int argc, char** argv )
     if( ! NodeManager::getInstance()->loadFromDirectory( argv[1] ) )
         return -1;
     
-   // app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
     //app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
-    app._nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
+    //app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    //app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    
+    //app._nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
     Node* popo =  NodeManager::getInstance()->create( "Foo" );
     popo->setPriority( 1 );
     app._nodes.push_back( popo );
@@ -38,6 +44,7 @@ int main ( int argc, char** argv )
     app.start();
     while(1)
     {
+        cout << "t=" << app.getElapsedTime() << endl;
         for( int k = 0; k < app._nodes.size(); ++k )
         {
             cout    << "NODE " << (unsigned long)app._nodes[k] << " - " 

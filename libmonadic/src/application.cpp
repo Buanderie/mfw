@@ -50,11 +50,10 @@ namespace monadic
     Node* Application::fetchActiveNode()
     {
     	Node* ret = NULL;
-
+      _nodeListMtx.lock();
     	while( ret == NULL )
     	{
-            // Let's forget about priorities for now
-    		_nodeListMtx.lock();
+        // Let's forget about priorities for now
     		for( unsigned int k = 0; k < _nodes.size(); ++k )
     		{
     			if( _nodes[k]->getState() == Node::NODE_ACTIVE )
@@ -64,20 +63,18 @@ namespace monadic
     			}
     		}
 
-            // Found one to be processed
+        // Found one to be processed
     		if( ret != NULL )
     		{
     			ret->_nodeState = Node::NODE_BUSY;
-    			_nodeListMtx.unlock();
     			break;
     		}
     		else
     		{
     			_nodeListCnd.wait( _nodeListMtx );
     		}
-    		_nodeListMtx.unlock();
     	}
-
+    	_nodeListMtx.unlock();
     	return ret;
     }
 

@@ -13,6 +13,7 @@ class FooNode : public monadic::Node
 
         private:
         int _cpt;
+        int limit;
         std::ofstream pol;
 };
 
