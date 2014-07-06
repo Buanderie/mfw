@@ -14,6 +14,7 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
     FooNode::FooNode()
     {
         std::cout << "Foo::CTOR" << std::endl;
+        monadic::Image* img = reinterpret_cast<monadic::Image*>( monadic::ObjectFactory::create("Image") );
     }
 
     FooNode::~FooNode()

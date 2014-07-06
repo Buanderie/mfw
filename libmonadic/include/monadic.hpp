@@ -1,15 +1,13 @@
 #ifndef __MONADIC_HPP__
 #define __MONADIC_HPP__
 
-// INTERNAL
+// CORE INTERNAL
 #include "application.hpp"
 #include "nodemanager.hpp"
 #include "hostmemorychunk.hpp"
 #include "nodeentry.hpp"
 
-namespace monadic
-{
-    void foo();
-}
+// OBJECTS
+#include "../objects/image/image.hpp"
 
 #endif

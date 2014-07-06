@@ -8,7 +8,6 @@ namespace monadic
 {
 		bool ApplicationWorker::run()
 		{
-			int i = 0;
 			while( 1 )
 			{
 				Node* n = _app->fetchActiveNode();

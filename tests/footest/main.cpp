@@ -18,6 +18,14 @@ using namespace std;
 
 int main ( int argc, char** argv )
 {
+    //Image img;
+    /*
+    Image* img = reinterpret_cast<Image*>( ObjectFactory::create("Image") );
+    img->popo();
+    cout << "img - " << img->getTypeName() << endl;
+    return 0;
+    */
+    
     Node* n;
 
     Application app;
@@ -32,7 +40,30 @@ int main ( int argc, char** argv )
     app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
     app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
     app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
-    
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
+    app._nodes.push_back( NodeManager::getInstance()->create( "Foo" ) );
     //app._nodes.push_back( NodeManager::getInstance()->create( "VideoInput" ) );
     Node* popo =  NodeManager::getInstance()->create( "Foo" );
     popo->setPriority( 1 );

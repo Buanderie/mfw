@@ -1,5 +1,5 @@
 
-#include "node.hpp"
+#include "monadic.hpp"
 #include <fstream>
 
 class FooNode : public monadic::Node

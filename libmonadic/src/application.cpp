@@ -15,7 +15,7 @@ namespace monadic
         //int ncore = boost::thread::hardware_concurrency();
         //cout << "pitaing " << ncore << " cores !" << endl;
         //_appThreadPool = boost::threadpool::prio_pool( boost::thread::hardware_concurrency() - 1 );
-        for( int k = 0; k < 2; ++k )
+        for( int k = 0; k < 4; ++k )
         {
         	_workers.push_back( new ApplicationWorker(this) );
         }
