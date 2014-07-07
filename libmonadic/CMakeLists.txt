@@ -4,7 +4,7 @@ project (LIBMONADIC)
 # Set custom cmake scripts directory
 set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${LIBMONADIC_SOURCE_DIR}/cmake")
 # Set CMake options
-set( USE_CUDA TRUE CACHE BOOL "Use nVidia CUDA as GPGPU API")
+set( USE_CUDA FALSE CACHE BOOL "Use nVidia CUDA as GPGPU API")
 option(USE_CLANG "build application with clang" OFF) # OFF is the default
 
 # Configure CLANG
