@@ -19,12 +19,19 @@
 
 // BOOST
 // Oh yeah.. heavy Boost shit inside core components :/
+#define BOOST_FILESYSTEM_VERSION 2
 #include <boost/filesystem.hpp>
 
 // INTERNAL
 #include "nodemanager.hpp"
 
 using namespace std;
+
+#if BOOST_VERSION < 104400
+using namespace boost::filesystem;
+#else
+using namespace boost::filesystem2;
+#endif
 
 namespace monadic
 {
@@ -74,7 +81,7 @@ namespace monadic
         {
             for ( boost::filesystem::recursive_directory_iterator end, dir(nodeModulePath); dir != end; ++dir )
             {
-                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension().string() == dlibExtension )
+                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension() == dlibExtension )
                 {
                     //cout << *dir << std::endl;
                     retCode += load( dir->path().string().c_str() );
@@ -85,7 +92,7 @@ namespace monadic
         {
             for ( boost::filesystem::directory_iterator end, dir(nodeModulePath); dir != end; ++dir )
             {
-                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension().string() == dlibExtension )
+                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension() == dlibExtension )
                 {
                     //cout << *dir << std::endl;
                     retCode += load( dir->path().string().c_str() );

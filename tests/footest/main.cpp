@@ -19,12 +19,12 @@ using namespace std;
 int main ( int argc, char** argv )
 {
     //Image img;
-    /*
+    
     Image* img = reinterpret_cast<Image*>( ObjectFactory::create("Image") );
     img->popo();
     cout << "img - " << img->getTypeName() << endl;
     return 0;
-    */
+    
     
     Node* n;
 

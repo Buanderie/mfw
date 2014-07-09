@@ -79,4 +79,4 @@ ENDIF()
 
 
 # Link libraries
-target_link_libraries( monadic ${Boost_LIBRARIES} )
+target_link_libraries( monadic ${Boost_LIBRARIES} dl )
