@@ -19,17 +19,16 @@ namespace monadic
         getNodeName_t* nodeDescriptor;
     } NodeManagerEntry_t;
     
-    class NodeManager : public Singleton<NodeManager>
+    class NodeManager /* : public Singleton<NodeManager> */
     {
-        friend class Singleton<NodeManager>;
+        //friend class Singleton<NodeManager>;
 
-        private:
+        public:
             NodeManager(){}
             ~NodeManager(){}
 
-        public:
-            int load( const char* nodeModulePath );
-            int loadFromDirectory( const char* nodeModulePath, bool recursiveSearch = true );
+            int load( const std::string& nodeModulePath );
+            int loadFromDirectory( const std::string& nodeModulePath, bool recursiveSearch = true );
             
             int release( const std::string& nodeTypeName );
             int releaseAll();
