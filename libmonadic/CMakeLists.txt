@@ -49,7 +49,7 @@ ENDIF()
 ENDIF()
 
 # Look for Boost
-find_package( Boost COMPONENTS system filesystem timer REQUIRED )
+find_package( Boost COMPONENTS system filesystem REQUIRED )
 if( Boost_FOUND)
     include_directories( ${Boost_INCLUDE_DIR} )
     ADD_DEFINITIONS( "-D__WITHBOOST__" )
