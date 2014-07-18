@@ -4,7 +4,6 @@
 // CORE INTERNAL
 #include "application.hpp"
 #include "nodemanager.hpp"
-#include "hostmemorychunk.hpp"
 #include "nodeentry.hpp"
 
 // OBJECTS
