@@ -58,7 +58,7 @@ endif()
 
 # Look for MessagePack
 find_package( MessagePack )
-include_directories( ${MessagePack_INCLUDE_DIRS} )
+include_directories( ${MessagePack_INCLUDE_DIR} )
 set( DEPS "${DEPS};${MessagePack_LIBRARIES}" )
 
 # Add Dynamic Library Loader dependency

@@ -3,6 +3,8 @@
 
 #ifndef __WINDOWS__
 #include "threadlinux.hpp"
+#else
+#include "threadwindows.hpp"
 #endif
 
 #endif // __THREAD_HPP__

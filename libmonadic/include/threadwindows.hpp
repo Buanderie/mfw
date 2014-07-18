@@ -1,9 +1,7 @@
-#ifndef __THREADLINUX_HPP__
-#define __THREADLINUX_HPP__
+#ifndef __THREADWINDOWS_HPP__
+#define __THREADWINDOWS_HPP__
 
-#ifdef __LINUX__
-
-#include <pthread.h>
+#include <windows.h>
 
 #include <iostream>
 
@@ -14,55 +12,56 @@ namespace monadic
 	class CondVar;
 	class Mutex
 	{
-	friend class CondVar;
+		friend class CondVar;
 	public:
 		Mutex(){
-			pthread_mutex_init(&_mtx, NULL);
+			// Initialize the critical section one time only.
+			if (!InitializeCriticalSectionAndSpinCount(&_mtx, 0x00000400))
+				return;
 		}
 
 		~Mutex(){
-			pthread_mutex_destroy(&_mtx);
+			DeleteCriticalSection(&_mtx);
 		}
 
 		bool lock(){
-			if(pthread_mutex_lock( &_mtx )) return false;
-				return true;
+			EnterCriticalSection(&_mtx);
+			return true;
 		}
 
 		bool unlock(){
-			if(pthread_mutex_unlock( &_mtx )) return false;
-				return true;
+			LeaveCriticalSection(&_mtx);
 		}
 	private:
-		pthread_mutex_t	_mtx;
+		CRITICAL_SECTION _mtx;
 	};
 
 	class CondVar
 	{
 	public:
 		CondVar(){
-			pthread_cond_init( &_condvar, NULL );
+			InitializeConditionVariable(&_condvar);
 		}
 		~CondVar(){
-			pthread_cond_destroy( &_condvar );
+			
 		}
 		void wait(Mutex& mtx){
-			pthread_cond_wait(&_condvar, &(mtx._mtx));
+			SleepConditionVariableCS(&_condvar, &(mtx._mtx), INFINITE);
 		}
 		void signal()
 		{
-			pthread_cond_broadcast(&_condvar);
+			WakeAllConditionVariable(&_condvar);
 		}
 	private:
-		pthread_cond_t	_condvar;
+		CONDITION_VARIABLE _condvar;
 	};
 
 	class Thread
 	{
 	public:
-		
+
 		typedef enum{
-			THREAD_ACTIVE=0,
+			THREAD_ACTIVE = 0,
 			THREAD_WAITSTOP,
 			THREAD_STOPPED
 		} Status;
@@ -78,8 +77,8 @@ namespace monadic
 
 		virtual bool start()
 		{
-			int ret = pthread_create( &_thread, NULL, Thread::runBinder, (void*)this );
-			if( !ret )
+			_thread = CreateThread(NULL, 0, runBinder, (PVOID)1, 0, &_threadId);
+			if (!_thread)
 			{
 				_threadStatus = THREAD_STOPPED;
 				return false;
@@ -99,10 +98,10 @@ namespace monadic
 
 		virtual void waitForTermination(){
 			_statusMtx.lock();
-			while( _threadStatus != THREAD_STOPPED )
+			while (_threadStatus != THREAD_STOPPED)
 			{
 				cout << "waitFormTermination" << endl;
-				_stopCnd.wait( _statusMtx );
+				_stopCnd.wait(_statusMtx);
 				cout << "pifpiad" << endl;
 			}
 			_statusMtx.unlock();
@@ -116,10 +115,10 @@ namespace monadic
 			return threadStatus;
 		}
 
-		virtual bool run()=0;
+		virtual bool run() = 0;
 
 	private:
-		static void* runBinder(void* instance)
+		static DWORD WINAPI runBinder(LPVOID instance)
 		{
 			((Thread*)instance)->run();
 			cout << "endrun" << endl;
@@ -135,7 +134,8 @@ namespace monadic
 		}
 
 		Status			_threadStatus;
-		pthread_t		_thread;
+		HANDLE          _thread;        // Handle
+		DWORD           _threadId;      // Id // Initialized at creation but not used further
 		Mutex 			_statusMtx;
 		CondVar 		_stopCnd;
 
@@ -147,6 +147,4 @@ namespace monadic
 	};
 }
 
-#endif
-
-#endif//__THREADLINUX_HPP__
+#endif//__THREADWINDOWS_HPP__
