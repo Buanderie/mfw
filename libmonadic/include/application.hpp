@@ -60,9 +60,9 @@ namespace monadic
 
             // Threadpool management
             std::vector< ApplicationWorker* >   _workers;
-            Mutex                               _nodeListMtx;
-            Mutex                               _timeRefMtx;
-            CondVar                             _nodeListCnd;
+            monadic::Mutex                      _nodeListMtx;
+            monadic::Mutex                      _timeRefMtx;
+            monadic::CondVar                    _nodeListCnd;
 
             // Plugin management
             NodeManager*                        _nodeManager;

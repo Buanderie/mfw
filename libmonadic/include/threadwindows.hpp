@@ -1,6 +1,8 @@
 #ifndef __THREADWINDOWS_HPP__
 #define __THREADWINDOWS_HPP__
 
+#ifdef __WINDOWS__
+
 #include <windows.h>
 
 #include <iostream>
@@ -146,5 +148,7 @@ namespace monadic
 		}
 	};
 }
+
+#endif //__WINDOWS__
 
 #endif//__THREADWINDOWS_HPP__
