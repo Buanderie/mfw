@@ -26,6 +26,10 @@ namespace monadic
       //
       std::string getTypeName(){ return _typeName; }
       
+      //
+      virtual void deserialize( std::vector< unsigned char >& dataBuffer )=0;
+      virtual void serialize( std::vector< unsigned char >& dataBuffer )=0;
+
     private:
       std::string _typeName;
             
@@ -67,7 +71,8 @@ namespace monadic
   };
 
 #define REGISTER_TYPE(T, STR) template<> monadic::ObjectFactory::Creator_t* monadic::ObjectFactory::Register<T>::creator = monadic::ObjectFactory::Register<T>::init_creator(STR)
-  
+#define CREATE_OBJECT(x) reinterpret_cast<x*>( ObjectFactory::create(#x) )
+
 }
 
 #endif

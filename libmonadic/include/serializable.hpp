@@ -14,8 +14,8 @@ namespace monadic
     Serializable(){}
     virtual ~Serializable(){}
     
-    virtual void deserialize( const std::vector< unsigned char >& dataBuffer )=0;
-    virtual std::vector< unsigned char > serialize()=0;
+    virtual void deserialize( std::vector< unsigned char >& dataBuffer )=0;
+    virtual void serialize( std::vector< unsigned char >& dataBuffer )=0;
     
   };
 }

@@ -35,10 +35,12 @@ using namespace boost::filesystem2;
 
 namespace monadic
 {
-    int NodeManager::load( const char* nodeModulePath )
+    int NodeManager::load( const std::string& nodeModulePath )
     {
         // load the node module library
-        void* nodeModule = dlopen( nodeModulePath, RTLD_LAZY );
+#ifdef __LINUX__
+        void* nodeModule = dlopen( nodeModulePath.c_str(), RTLD_LAZY );
+#endif
         if (!nodeModule)
         {
             //cerr << "Cannot load library: " << dlerror() << '\n';
@@ -46,12 +48,17 @@ namespace monadic
         }
         
         // load the symbols
+#ifdef __LINUX__
         createNode_t* create_node = (createNode_t*) dlsym(nodeModule, "createNode");
         destroyNode_t* destroy_node = (destroyNode_t*) dlsym(nodeModule, "destroyNode");
         getNodeName_t* name_node = (getNodeName_t*) dlsym(nodeModule, "getNodeName");
+#endif
+
         if (!create_node || !name_node || !destroy_node) {
             //cerr << "Cannot load symbols: " << dlerror() << '\n';
+#ifdef __LINUX__
             dlclose( nodeModule );
+#endif
             return 1;
         }
         
@@ -73,13 +80,13 @@ namespace monadic
         return 0;
     }
     
-    int NodeManager::loadFromDirectory( const char* nodeModulePath, bool recursiveSearch )
+    int NodeManager::loadFromDirectory( const std::string& nodeModulePath, bool recursiveSearch )
     {
         int retCode = -1;
 
         if( recursiveSearch )
         {
-            for ( boost::filesystem::recursive_directory_iterator end, dir(nodeModulePath); dir != end; ++dir )
+            for ( boost::filesystem::recursive_directory_iterator end, dir(nodeModulePath.c_str()); dir != end; ++dir )
             {
                 if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension() == dlibExtension )
                 {

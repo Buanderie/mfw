@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 
+/*
 class Base {
  public:
   virtual size_t id() const = 0;
@@ -54,13 +55,15 @@ class D2 : public Base {
 };
 
 const size_t D2::id_ = SimpleFactory::registerFunc(&create);
-
+*/
 int main() {
+    /*
   Base* b1 = SimpleFactory::create(0);
   Base* b2 = SimpleFactory::create(1);
   std::cout << "b1 name: " << b1->name() << "\tid: " << b1->id() << "\n";
   std::cout << "b2 name: " << b2->name() << "\tid: " << b2->id() << "\n";
   delete b1;
   delete b2;
+  */
   return 0;
 }

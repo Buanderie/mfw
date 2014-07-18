@@ -19,10 +19,19 @@ namespace monadic
         {
         	_workers.push_back( new ApplicationWorker(this) );
         }
+
+        // Create the node manager
+        _nodeManager = new NodeManager();
+        _nodeManager->loadFromDirectory( _pluginFolder, true );
+
     }
 
     void Application::start()
     {
+
+        for( int k = 0; k < _nodes.size(); ++k )
+            _nodes[k]->setup();
+
     	for( unsigned int k = 0; k < _workers.size(); ++k )
     	{
     		_workers[k]->start();
@@ -110,4 +119,18 @@ namespace monadic
     		_workers[k]->waitForTermination();
     	}
     }
+}
+
+monadic::Node* monadic::Application::addNode( const std::string& nodeType )
+{
+    Node* n = _nodeManager->create( nodeType );
+    _nodes.push_back( n );
+    return n;
+}
+
+std::vector< monadic::Node* > getNodeList()
+{
+    std::vector< monadic::Node* > res;
+
+    return res;
 }

@@ -49,12 +49,20 @@ ENDIF()
 ENDIF()
 
 # Look for Boost
-find_package( Boost COMPONENTS system filesystem REQUIRED )
+find_package( Boost COMPONENTS system filesystem timer REQUIRED )
 if( Boost_FOUND)
     include_directories( ${Boost_INCLUDE_DIR} )
     ADD_DEFINITIONS( "-D__WITHBOOST__" )
-    message( ${Boost_INCLUDE_DIR} )
+    set( DEPS "${DEPS};${Boost_LIBRARIES}" )
 endif()
+
+# Look for MessagePack
+find_package( MessagePack )
+include_directories( ${MessagePack_INCLUDE_DIRS} )
+set( DEPS "${DEPS};${MessagePack_LIBRARIES}" )
+
+# Add Dynamic Library Loader dependency
+set( DEPS "${DEPS};dl" )
 
 # Set include directories
 include_directories( ${LIBMONADIC_SOURCE_DIR}/include )
@@ -64,7 +72,7 @@ IF( USE_CUDA AND CUDA_FOUND )
     include_directories( ${CUDA_INCLUDE_DIRS} )
 ENDIF()
 
-# Global shit
+# Global source fetching
 IF( USE_CUDA AND CUDA_FOUND )
     file ( GLOB_RECURSE CORE_CPP ./src/*.c* )
     file ( GLOB_RECURSE CORE_OBJECTS_CPP ./objects/*/*.c* )
@@ -79,4 +87,4 @@ ENDIF()
 
 
 # Link libraries
-target_link_libraries( monadic ${Boost_LIBRARIES} dl )
+target_link_libraries( monadic ${DEPS} )

@@ -16,6 +16,7 @@ namespace monadic
     
     friend class NodeManager;
     friend class Application;
+    friend class ApplicationWorker;
 
     protected:
                     
@@ -50,6 +51,7 @@ namespace monadic
         
         virtual void setup()=0;
         virtual void tick( double dTime )=0;
+        unsigned int getTickCount(){ return _tickCount; }
 
     private:
         void*           _nodeThread;
@@ -57,6 +59,7 @@ namespace monadic
         std::string     _nodeName;
         unsigned int    _priority;
         NodeState       _nodeState;
+        unsigned int    _tickCount;
     };
 
     // the types of the node factories
