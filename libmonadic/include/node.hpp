@@ -19,7 +19,8 @@ namespace monadic
     friend class ApplicationWorker;
 
     protected:
-                    
+		std::string     _nodeTypeName;
+
     public:
 
         typedef enum{
@@ -37,7 +38,7 @@ namespace monadic
         void stop();
         void run();
         
-        std::string getTypeName(){ return Node::_nodeTypeName; }
+        std::string getTypeName(){ return _nodeTypeName; }
 
         unsigned int getPriority(){ return _priority; }
         void setPriority( unsigned int priority ){ _priority = priority; }
@@ -56,7 +57,6 @@ namespace monadic
 		
     private:
         void*           _nodeThread;
-		std::string     _nodeTypeName;
         std::string     _nodeName;
         unsigned int    _priority;
         NodeState       _nodeState;
