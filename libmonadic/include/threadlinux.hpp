@@ -3,8 +3,10 @@
 
 #ifdef __LINUX__
 
+// POSIX
 #include <pthread.h>
 
+// STL
 #include <iostream>
 
 using namespace std;

@@ -3,8 +3,10 @@
 
 #ifdef __WINDOWS__
 
+// WINDOWS
 #include <windows.h>
 
+// STL
 #include <iostream>
 
 using namespace std;
