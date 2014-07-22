@@ -53,10 +53,10 @@ namespace monadic
         virtual void tick( double dTime )=0;
         unsigned int getTickCount(){ return _tickCount; }
 
-		static std::string     _nodeTypeName;
+		
     private:
         void*           _nodeThread;
-        
+		std::string     _nodeTypeName;
         std::string     _nodeName;
         unsigned int    _priority;
         NodeState       _nodeState;
