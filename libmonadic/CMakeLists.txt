@@ -30,16 +30,6 @@ if( USE_CLANG )
     SET (CMAKE_RANLIB  "/usr/bin/llvm-ranlib")
 endif( USE_CLANG )
 
-# Handle platform specifics
-if ( "${CMAKE_SYSTEM_NAME}" MATCHES "Windows" )
-    ADD_DEFINITIONS( -D__WINDOWS__ )
-elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Linux" )
-	message( "POLBAK" )
-    ADD_DEFINITIONS( -D__LINUX__ )
-elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Darwin" )
-    ADD_DEFINITIONS( -D__MACOSX__ )
-endif()
-
 # Look for CUDA
 IF( USE_CUDA )
 find_package( CUDA )

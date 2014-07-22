@@ -1,9 +1,9 @@
 #ifndef __THREAD_HPP__
 #define __THREAD_HPP__
 
-#ifndef __WINDOWS__
+#if defined(__LINUX__)
 #include "threadlinux.hpp"
-#else
+#elif defined(__WINDOWS__)
 #include "threadwindows.hpp"
 #endif
 
