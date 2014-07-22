@@ -37,7 +37,7 @@ namespace monadic
         void stop();
         void run();
         
-        std::string getTypeName(){ return _nodeTypeName; }
+        std::string getTypeName(){ return Node::_nodeTypeName; }
 
         unsigned int getPriority(){ return _priority; }
         void setPriority( unsigned int priority ){ _priority = priority; }
@@ -53,9 +53,10 @@ namespace monadic
         virtual void tick( double dTime )=0;
         unsigned int getTickCount(){ return _tickCount; }
 
+		static std::string     _nodeTypeName;
     private:
         void*           _nodeThread;
-        std::string     _nodeTypeName;
+        
         std::string     _nodeName;
         unsigned int    _priority;
         NodeState       _nodeState;
@@ -69,13 +70,11 @@ namespace monadic
 
 }
 
-#define MONADIC_NODE_EXPORT(X, Y) 	extern "C" monadic::Node* createNode() { 	    \
-						                return new X;		                        \
-					                }						                        \
-					                extern "C" void destroyNode(monadic::Node* p) {	\
-						                delete p;				                    \
-					                }                                               \
-                                    extern "C" char* getNodeName(){                 \
-                                        return strdup(Y);                           \
-                                    }
+#define MONADIC_NODE_EXPORT(X, Y) 	extern "C" __declspec(dllexport) monadic::Node* createNode() { 	    \
+										return new X;		                        \
+									}						                        \
+									extern "C" __declspec(dllexport) void destroyNode(monadic::Node* p) {\
+										delete p;				                    \
+									}                                               
+
 #endif

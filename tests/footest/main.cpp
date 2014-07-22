@@ -1,14 +1,7 @@
-// C
-#include <dlfcn.h>
-#include <unistd.h>
-
 // STL
 #include <iostream>
 #include <iomanip>
 #include <vector>
-
-// BOOST
-#include <boost/timer.hpp>
 
 // Monadic
 #include <monadic.hpp>
@@ -48,7 +41,7 @@ int main ( int argc, char** argv )
 
     Node* n;
 
-    Application app( argv[1] );
+    Application app( "pol" );
     //vector< Node* > nodes;
     
     /*
@@ -129,6 +122,7 @@ int main ( int argc, char** argv )
     app.addNode( "Foo" );
 
     app.start();
+	
     while(1)
     {
         cout << "t=" << app.getElapsedTime() << endl;
@@ -139,7 +133,7 @@ int main ( int argc, char** argv )
                     << endl;
         }
         cout << endl;
-        sleep(1);
+        Sleep(1000);
     }
 
     cout << "CHIPS" << endl;

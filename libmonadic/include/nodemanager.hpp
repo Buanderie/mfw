@@ -16,7 +16,6 @@ namespace monadic
     {
         createNode_t* nodeCreator;
         destroyNode_t* nodeDestructor;
-        getNodeName_t* nodeDescriptor;
     } NodeManagerEntry_t;
     
     class NodeManager /* : public Singleton<NodeManager> */

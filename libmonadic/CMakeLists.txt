@@ -39,21 +39,15 @@ IF( CUDA_FOUND )
 ENDIF()
 ENDIF()
 
-# Look for Boost
-find_package( Boost COMPONENTS system filesystem REQUIRED )
-if( Boost_FOUND)
-    include_directories( ${Boost_INCLUDE_DIR} )
-    ADD_DEFINITIONS( "-D__WITHBOOST__" )
-    set( DEPS "${DEPS};${Boost_LIBRARIES}" )
-endif()
-
 # Look for MessagePack
 find_package( MessagePack )
 include_directories( ${MessagePack_INCLUDE_DIR} )
 set( DEPS "${DEPS};${MessagePack_LIBRARIES}" )
 
-# Add Dynamic Library Loader dependency
-set( DEPS "${DEPS};dl" )
+# Add Dynamic Library Loader dependency (if UNIX-based)
+if( ${MONADIC_CURRENT_SYSTEM} STREQUAL "LINUX" )
+	set( DEPS "${DEPS};dl" )
+endif()
 
 # Set include directories
 include_directories( ${LIBMONADIC_SOURCE_DIR}/include )
@@ -71,9 +65,9 @@ IF( USE_CUDA AND CUDA_FOUND )
     cuda_add_library( monadic SHARED ${ALL_CPP} )
 ELSE()
     file ( GLOB_RECURSE CORE_CPP ./src/*.cpp )
-    file ( GLOB_RECURSE CORE_OBJECTS_CPP ./objects/*/*.cpp )
+    #file ( GLOB_RECURSE CORE_OBJECTS_CPP ./objects/*/*.cpp )
     set( ALL_CPP ${CORE_CPP} ${CORE_OBJECTS_CPP} )
-    add_library( monadic SHARED ${ALL_CPP} )
+    add_library( monadic ${ALL_CPP} )
 ENDIF()
 
 

@@ -6,7 +6,4 @@
 #include "nodemanager.hpp"
 #include "nodeentry.hpp"
 
-// OBJECTS
-#include "../objects/image/image.hpp"
-
 #endif

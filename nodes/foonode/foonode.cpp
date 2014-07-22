@@ -5,16 +5,16 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstring>
-#include <unistd.h>
+//#include <unistd.h>
 using namespace std;
 
 MONADIC_NODE_EXPORT( FooNode, "Foo" )
 
-   
     FooNode::FooNode()
     {
         std::cout << "Foo::CTOR" << std::endl;
-        monadic::Image* img = reinterpret_cast<monadic::Image*>( monadic::ObjectFactory::create("Image") );
+		std::cout << "dlfk=" << _nodeTypeName << endl;
+        //monadic::Image* img = reinterpret_cast<monadic::Image*>( monadic::ObjectFactory::create("Image") );
     }
 
     FooNode::~FooNode()

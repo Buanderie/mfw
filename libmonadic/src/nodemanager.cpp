@@ -57,14 +57,12 @@ namespace monadic
 #ifdef __LINUX__
         createNode_t* create_node = (createNode_t*) dlsym(nodeModule, "createNode");
         destroyNode_t* destroy_node = (destroyNode_t*) dlsym(nodeModule, "destroyNode");
-        getNodeName_t* name_node = (getNodeName_t*) dlsym(nodeModule, "getNodeName");
 #elif defined(__WINDOWS__)
 		createNode_t* create_node = (createNode_t*)GetProcAddress(nodeModule, "createNode");
 		destroyNode_t* destroy_node = (destroyNode_t*)GetProcAddress(nodeModule, "createNode");
-		getNodeName_t* name_node = (getNodeName_t*)GetProcAddress(nodeModule, "createNode");
 #endif
 
-        if (!create_node || !name_node || !destroy_node) {
+        if (!create_node || !destroy_node) {
             //cerr << "Cannot load symbols: " << dlerror() << '\n';
 #ifdef __LINUX__
             dlclose( nodeModule );
@@ -76,10 +74,8 @@ namespace monadic
         NodeManagerEntry_t ent;
         ent.nodeCreator = create_node;
         ent.nodeDestructor = destroy_node;
-        ent.nodeDescriptor = name_node;
-        char* nodeName = name_node();
-        std::string strNodeName = nodeName;
-        delete nodeName;
+		Node* tmpNode = create_node();
+		std::string strNodeName = tmpNode->getTypeName();
         _nodeRegistry.insert ( std::pair<std::string, NodeManagerEntry_t>( strNodeName,ent ) );
         cout << "Loaded node module: " << strNodeName << endl;
         return 0;
