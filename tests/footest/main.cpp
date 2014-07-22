@@ -98,6 +98,7 @@ int main ( int argc, char** argv )
         app._nodes[k]->setup();
     */
 
+    /*
     app.addNode( "VideoInput" );
     app.addNode( "VideoInput" );
     app.addNode( "VideoInput" );
@@ -107,6 +108,7 @@ int main ( int argc, char** argv )
     app.addNode( "VideoInput" );
     app.addNode( "VideoInput" );
     app.addNode( "VideoInput" );
+    */
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
