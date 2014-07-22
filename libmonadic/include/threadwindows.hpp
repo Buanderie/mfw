@@ -35,6 +35,7 @@ namespace monadic
 
 		bool unlock(){
 			LeaveCriticalSection(&_mtx);
+			return true;
 		}
 	private:
 		CRITICAL_SECTION _mtx;
@@ -81,7 +82,7 @@ namespace monadic
 
 		virtual bool start()
 		{
-			_thread = CreateThread(NULL, 0, runBinder, (PVOID)1, 0, &_threadId);
+			_thread = CreateThread(NULL, 0, runBinder, (PVOID)this, 0, &_threadId);
 			if (!_thread)
 			{
 				_threadStatus = THREAD_STOPPED;
