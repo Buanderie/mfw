@@ -12,7 +12,11 @@
 #endif
 
 // SYSTEM
-#include <dlfcn.h>
+#ifdef __LINUX__
+	#include <dlfcn.h>
+#elif defined(__WINDOWS__)
+#include <Windows.h>
+#endif
 
 // STL
 #include <iostream>
@@ -40,6 +44,8 @@ namespace monadic
         // load the node module library
 #ifdef __LINUX__
         void* nodeModule = dlopen( nodeModulePath.c_str(), RTLD_LAZY );
+#elif defined(__WINDOWS__)
+		HMODULE nodeModule = LoadLibrary(nodeModulePath.c_str());
 #endif
         if (!nodeModule)
         {
@@ -52,6 +58,10 @@ namespace monadic
         createNode_t* create_node = (createNode_t*) dlsym(nodeModule, "createNode");
         destroyNode_t* destroy_node = (destroyNode_t*) dlsym(nodeModule, "destroyNode");
         getNodeName_t* name_node = (getNodeName_t*) dlsym(nodeModule, "getNodeName");
+#elif defined(__WINDOWS__)
+		createNode_t* create_node = (createNode_t*)GetProcAddress(nodeModule, "createNode");
+		destroyNode_t* destroy_node = (destroyNode_t*)GetProcAddress(nodeModule, "createNode");
+		getNodeName_t* name_node = (getNodeName_t*)GetProcAddress(nodeModule, "createNode");
 #endif
 
         if (!create_node || !name_node || !destroy_node) {
