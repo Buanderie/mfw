@@ -4,9 +4,6 @@
 // C
 #include <ctime>
 
-// UNIX
-#include <sys/time.h>
-
 // STL
 #include <vector>
 #include <iostream>
@@ -19,6 +16,7 @@
 #include "nodemanager.hpp"
 #include "node.hpp"
 #include "thread.hpp"
+#include "timeref.hpp"
 
 using namespace std;
 
@@ -69,7 +67,7 @@ namespace monadic
             std::string                         _pluginFolder;
 
             // Time reference
-            struct timeval _timeRef;
+            TimeRef _timeRef;
 
             void init();
                    

@@ -36,22 +36,13 @@ namespace monadic
     	{
     		_workers[k]->start();
     	}
-
-    	// Update time reference
-    	//_timeRef = time(NULL);
-    	gettimeofday(&_timeRef, NULL);
     }
 
     double Application::getElapsedTime()
     {
-    	struct timeval finishtime;
-    	gettimeofday(&finishtime, NULL);
-    	long msec;
-    	double ret;
+    	double ret = 0.0;
     	_timeRefMtx.lock();
-  		msec=(finishtime.tv_sec-_timeRef.tv_sec)*1000;
-  		msec+=(finishtime.tv_usec-_timeRef.tv_usec)/1000;
-  		ret = (double)msec / 1000.0;
+
     	_timeRefMtx.unlock();
     	return ret;
     }
