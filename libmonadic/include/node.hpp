@@ -7,6 +7,13 @@
 // STL
 #include <string>
 
+// PLUGIN EXPORT
+#if defined(__LINUX__)
+#define MONADIC_EXPORT_SYMBOL
+#elif defined(__WINDOWS__)
+#define MONADIC_EXPORT_SYMBOL __declspec(dllexport)
+#endif
+
 // INTERNAL
 
 namespace monadic
@@ -70,10 +77,10 @@ namespace monadic
 
 }
 
-#define MONADIC_NODE_EXPORT(X, Y) 	extern "C" __declspec(dllexport) monadic::Node* createNode() { 	    \
+#define MONADIC_NODE_EXPORT(X, Y) 	extern "C" MONADIC_EXPORT_SYMBOL monadic::Node* createNode() { 	    \
 										return new X;		                        \
 									}						                        \
-									extern "C" __declspec(dllexport) void destroyNode(monadic::Node* p) {\
+									extern "C" MONADIC_EXPORT_SYMBOL void destroyNode(monadic::Node* p) {\
 										delete p;				                    \
 									}                                               
 

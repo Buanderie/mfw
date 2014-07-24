@@ -67,7 +67,11 @@ ELSE()
     file ( GLOB_RECURSE CORE_CPP ./src/*.cpp )
     #file ( GLOB_RECURSE CORE_OBJECTS_CPP ./objects/*/*.cpp )
     set( ALL_CPP ${CORE_CPP} ${CORE_OBJECTS_CPP} )
-    add_library( monadic ${ALL_CPP} )
+    if( ${MONADIC_CURRENT_SYSTEM} STREQUAL "WINDOWS" )
+      add_library( monadic ${ALL_CPP} )
+    else()
+      add_library( monadic SHARED ${ALL_CPP} )
+    endif()
 ENDIF()
 
 
