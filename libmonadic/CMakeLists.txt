@@ -44,6 +44,18 @@ find_package( MessagePack )
 include_directories( ${MessagePack_INCLUDE_DIR} )
 set( DEPS "${DEPS};${MessagePack_LIBRARIES}" )
 
+# Find Boost
+FIND_PACKAGE(Boost COMPONENTS filesystem system)
+IF (Boost_FOUND)
+    set( BOOST_FILESYSTEM_VERSION 2 )
+    LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+    ADD_DEFINITIONS( "-DHAS_BOOST" )
+    ADD_DEFINITIONS( "-D__BOOST__" )
+    set( DEPS "${DEPS};${Boost_LIBRARIES}" )
+ENDIF()
+#
+
 # Add Dynamic Library Loader dependency (if UNIX-based)
 if( ${MONADIC_CURRENT_SYSTEM} STREQUAL "LINUX" )
 	set( DEPS "${DEPS};dl" )

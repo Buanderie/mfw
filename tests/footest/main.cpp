@@ -3,6 +3,12 @@
 #include <iomanip>
 #include <vector>
 
+#ifdef __WINDOWS__
+
+#else
+#include <unistd.h>
+#endif
+
 // Monadic
 #include <monadic.hpp>
 
@@ -133,7 +139,11 @@ int main ( int argc, char** argv )
                     << endl;
         }
         cout << endl;
+        #ifdef __WINDOWS__
         Sleep(1000);
+        #else
+        sleep(1);
+        #endif
     }
 
     cout << "CHIPS" << endl;
