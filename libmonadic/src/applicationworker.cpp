@@ -1,7 +1,7 @@
 
 
 // INTERNAL
-#include "kernel.hpp"
+#include "node.hpp"
 #include "applicationworker.hpp"
 
 namespace monadic

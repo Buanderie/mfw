@@ -15,14 +15,14 @@ namespace monadic
         //int ncore = boost::thread::hardware_concurrency();
         //cout << "pitaing " << ncore << " cores !" << endl;
         //_appThreadPool = boost::threadpool::prio_pool( boost::thread::hardware_concurrency() - 1 );
-        for( int k = 0; k < 8; ++k )
+        for( int k = 0; k < 4; ++k )
         {
         	_workers.push_back( new ApplicationWorker(this) );
         }
 
         // Create the node manager
-        _nodeManager = new NodeManager();
-        _nodeManager->loadFromDirectory( _pluginFolder, true );
+        _kernelManager = new KernelManager();
+        _kernelManager->loadFromDirectory( _pluginFolder, true );
 
     }
 
@@ -114,7 +114,7 @@ namespace monadic
 
 monadic::Node* monadic::Application::addNode( const std::string& nodeType )
 {
-    Node* n = _nodeManager->create( nodeType );
+    Node* n = _kernelManager->create( nodeType );
     _nodes.push_back( n );
     return n;
 }

@@ -47,7 +47,7 @@ int main ( int argc, char** argv )
 
     Node* n;
 
-    Application app( "pol" );
+    Application app( argv[1] );
     //vector< Node* > nodes;
     
     /*
@@ -135,7 +135,7 @@ int main ( int argc, char** argv )
         for( int k = 0; k < app._nodes.size(); ++k )
         {
             cout    << "NODE " << (unsigned long)app._nodes[k] << " - " 
-                    << app._nodes[k]->getTypeName() << " state: " << app._nodes[k]->getState() 
+                    << app._nodes[k]->getKernelName() << " state: " << app._nodes[k]->getState()
                     << endl;
         }
         cout << endl;

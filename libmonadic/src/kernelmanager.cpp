@@ -55,38 +55,37 @@ namespace monadic
         
         // load the symbols
 #ifdef __LINUX__
-        createNode_t* create_node = (createNode_t*) dlsym(nodeModule, "createNode");
-        destroyNode_t* destroy_node = (destroyNode_t*) dlsym(nodeModule, "destroyNode");
+        createNode_t* create_node = (createNode_t*) dlsym(kernelModule, "createNode");
+        destroyNode_t* destroy_node = (destroyNode_t*) dlsym(kernelModule, "destroyNode");
 #elif defined(__WINDOWS__)
-		createNode_t* create_node = (createNode_t*)GetProcAddress(nodeModule, "createNode");
-		destroyNode_t* destroy_node = (destroyNode_t*)GetProcAddress(nodeModule, "createNode");
+        createNode_t* create_node = (createNode_t*)GetProcAddress(kernelModule, "createNode");
+        destroyNode_t* destroy_node = (destroyNode_t*)GetProcAddress(kernelModule, "createNode");
 #endif
 
         if (!create_node || !destroy_node) {
             //cerr << "Cannot load symbols: " << dlerror() << '\n';
 #ifdef __LINUX__
-            dlclose( nodeModule );
+            dlclose( kernelModule );
 #endif
             return 1;
         }
         
         // Create new entry in the registry
-        NodeManagerEntry_t ent;
-        ent.nodeCreator = create_node;
-        ent.nodeDestructor = destroy_node;
+        Kernel kernelEntry( create_node, destroy_node );
+        //TODO: Is there a better way to retrieve Kernel Name ?
 		Node* tmpNode = create_node();
-		std::string strNodeName = tmpNode->getTypeName();
-        _nodeRegistry.insert ( std::pair<std::string, NodeManagerEntry_t>( strNodeName,ent ) );
-        cout << "Loaded node module: " << strNodeName << endl;
+        std::string strKernelName = tmpNode->getKernelName();
+        _kernelRegistry.insert ( std::pair<std::string, Kernel>( strKernelName, kernelEntry ) );
+        cout << "Loaded kernel module: " << strKernelName << endl;
         return 0;
     }
     
-    int NodeManager::release( const std::string& nodeTypeName )
+    int KernelManager::release( const std::string& kernelName )
     {
         return 0;
     }
     
-    int NodeManager::loadFromDirectory( const std::string& nodeModulePath, bool recursiveSearch )
+    int KernelManager::loadFromDirectory( const std::string& nodeModulePath, bool recursiveSearch )
     {
         int retCode = -1;
 
@@ -115,24 +114,25 @@ namespace monadic
         return retCode;
     }
     
-    int NodeManager::releaseAll()
+    int KernelManager::releaseAll()
     {
         return 0;
     }
     
-    Node* NodeManager::create( const std::string& nodeTypeName )
+    Node* KernelManager::create( const std::string& kernelName )
     {
-        NodeManagerEntry_t ent = _nodeRegistry[ nodeTypeName ];
-        Node* nNode = ent.nodeCreator();
-        nNode->_nodeTypeName = nodeTypeName;
+        // THIS COULD CRASH IF KERNEL DOESN'T EXIST
+        Kernel ent = _kernelRegistry[ kernelName ];
+        Node* nNode = ent.create();
+        nNode->_kernelName = kernelName;
         return nNode;
     }
     
-    int NodeManager::destroy( Node* node )
+    int KernelManager::destroy( Node* node )
     {
-        std::string nodeName = node->_nodeTypeName;
-        NodeManagerEntry_t ent = _nodeRegistry[ nodeName ];
-        ent.nodeDestructor( node );
+        std::string nodeName = node->_kernelName;
+        Kernel ent = _kernelRegistry[ nodeName ];
+        ent.destroy( node );
         return 0;
     }
     

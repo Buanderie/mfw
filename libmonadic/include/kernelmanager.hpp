@@ -11,13 +11,6 @@
 
 namespace monadic
 {
-
-    typedef struct
-    {
-        createNode_t* nodeCreator;
-        destroyNode_t* nodeDestructor;
-    } KernelManagerEntry_t;
-    
     class KernelManager /* : public Singleton<NodeManager> */
     {
         //friend class Singleton<NodeManager>;
@@ -29,14 +22,14 @@ namespace monadic
             int load( const std::string& kernelModulePath );
             int loadFromDirectory( const std::string& kernelModulePath, bool recursiveSearch = true );
             
-            int release( const std::string& kernelTypeName );
+            int release(const std::string& kernelName );
             int releaseAll();
             
-            Node* create( const std::string& kernelTypeName );
+            Node* create(const std::string& kernelName );
             int destroy( Node* node );
             
         private:
-            std::map< std::string, KernelManagerEntry_t > _kernelRegistry;
+            std::map< std::string, Kernel > _kernelRegistry;
 
     };
 }

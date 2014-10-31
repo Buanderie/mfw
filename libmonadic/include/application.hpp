@@ -14,7 +14,7 @@
 
 // INTERNAL
 #include "kernelmanager.hpp"
-#include "kernel.hpp"
+#include "node.hpp"
 #include "thread.hpp"
 #include "timeref.hpp"
 
@@ -63,7 +63,7 @@ namespace monadic
             monadic::CondVar                    _nodeListCnd;
 
             // Plugin management
-            NodeManager*                        _nodeManager;
+            KernelManager*                      _kernelManager;
             std::string                         _pluginFolder;
 
             // Time reference

@@ -3,7 +3,7 @@
 
 // CORE INTERNAL
 #include "application.hpp"
-#include "nodemanager.hpp"
-#include "nodeentry.hpp"
+#include "kernelmanager.hpp"
+//#include "nodeentry.hpp"
 
 #endif
