@@ -15,5 +15,5 @@ elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Darwin" )
 endif()
 
 add_subdirectory(libmonadic)
-add_subdirectory(nodes)
+add_subdirectory(kernels)
 add_subdirectory(tests)

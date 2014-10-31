@@ -27,7 +27,7 @@
 #include <boost/filesystem.hpp>
 
 // INTERNAL
-#include "nodemanager.hpp"
+#include "kernelmanager.hpp"
 
 using namespace std;
 
@@ -39,15 +39,15 @@ using namespace boost::filesystem2;
 
 namespace monadic
 {
-    int NodeManager::load( const std::string& nodeModulePath )
+    int KernelManager::load(const std::string& kernelModulePath )
     {
         // load the node module library
 #ifdef __LINUX__
-        void* nodeModule = dlopen( nodeModulePath.c_str(), RTLD_LAZY );
+        void* kernelModule = dlopen( kernelModulePath.c_str(), RTLD_LAZY );
 #elif defined(__WINDOWS__)
-		HMODULE nodeModule = LoadLibrary(nodeModulePath.c_str());
+        HMODULE kernelModule = LoadLibrary(kernelModulePath.c_str());
 #endif
-        if (!nodeModule)
+        if (!kernelModule)
         {
             //cerr << "Cannot load library: " << dlerror() << '\n';
             return 1;    

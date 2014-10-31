@@ -13,8 +13,8 @@
 //#include <chrono>
 
 // INTERNAL
-#include "nodemanager.hpp"
-#include "node.hpp"
+#include "kernelmanager.hpp"
+#include "kernel.hpp"
 #include "thread.hpp"
 #include "timeref.hpp"
 
