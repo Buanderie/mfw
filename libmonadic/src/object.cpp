@@ -6,7 +6,9 @@
 #include <vector>
 
 // MSGPACK
+/*
 #include <msgpack.hpp>
+*/
 
 // INTERNAL
 #include "object.hpp"
@@ -15,6 +17,7 @@ using namespace std;
 
 void monadic::Object::deserialize( std::vector< unsigned char >& dataBuffer )
 {
+    /*
     // Object retrieves its type
     msgpack::unpacker pac;
 
@@ -38,14 +41,17 @@ void monadic::Object::deserialize( std::vector< unsigned char >& dataBuffer )
     unsigned extractedSize = origSize - finalSize;
     cout << "finalSize=" << finalSize << endl;
     dataBuffer.erase( dataBuffer.begin(), dataBuffer.begin() + extractedSize );
+    */
 }
 
 void monadic::Object::serialize( std::vector< unsigned char >& dataBuffer )
 {
+    /*
     msgpack::sbuffer sbuf;
     msgpack::pack( sbuf, _typeName );
     for( int k = 0; k < sbuf.size(); ++k )
     {
         dataBuffer.push_back( (unsigned char)(sbuf.data()[k]));
     }
+    */
 }

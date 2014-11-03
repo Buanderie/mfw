@@ -39,11 +39,6 @@ IF( CUDA_FOUND )
 ENDIF()
 ENDIF()
 
-# Look for MessagePack
-find_package( MessagePack )
-include_directories( ${MessagePack_INCLUDE_DIR} )
-set( DEPS "${DEPS};${MessagePack_LIBRARIES}" )
-
 # Add Dynamic Library Loader dependency (if UNIX-based)
 if( ${MONADIC_CURRENT_SYSTEM} STREQUAL "LINUX" )
 	set( DEPS "${DEPS};dl" )
