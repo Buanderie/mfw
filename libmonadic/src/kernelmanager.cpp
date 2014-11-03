@@ -21,21 +21,11 @@
 // STL
 #include <iostream>
 
-// BOOST
-// Oh yeah.. heavy Boost shit inside core components :/
-#define BOOST_FILESYSTEM_VERSION 2
-#include <boost/filesystem.hpp>
-
 // INTERNAL
 #include "kernelmanager.hpp"
+#include "filesystem.hpp"
 
 using namespace std;
-
-#if BOOST_VERSION < 104400
-using namespace boost::filesystem;
-#else
-using namespace boost::filesystem2;
-#endif
 
 namespace monadic
 {
@@ -88,28 +78,14 @@ namespace monadic
     int KernelManager::loadFromDirectory( const std::string& nodeModulePath, bool recursiveSearch )
     {
         int retCode = -1;
+        std::vector< monadic::filesystem::Path > files;
+        monadic::filesystem::Path p(nodeModulePath);
+        files = p.getChildren( recursiveSearch );
 
-        if( recursiveSearch )
+        for( int k = 0; k < files.size(); ++k )
         {
-            for ( boost::filesystem::recursive_directory_iterator end, dir(nodeModulePath.c_str()); dir != end; ++dir )
-            {
-                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension() == dlibExtension )
-                {
-                    //cout << *dir << std::endl;
-                    retCode += load( dir->path().string().c_str() );
-                }                                    
-            }
-        }
-        else
-        {
-            for ( boost::filesystem::directory_iterator end, dir(nodeModulePath); dir != end; ++dir )
-            {
-                if( !boost::filesystem::is_directory( dir->path() ) && dir->path().extension() == dlibExtension )
-                {
-                    //cout << *dir << std::endl;
-                    retCode += load( dir->path().string().c_str() );
-                }                                 
-            }
+            if( files[k].extension() == dlibExtension )
+                retCode += load( files[k].str() );
         }
         return retCode;
     }

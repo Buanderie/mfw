@@ -6,4 +6,7 @@
 #include "kernelmanager.hpp"
 //#include "nodeentry.hpp"
 
+// FILESYSTEM
+#include "filesystem.hpp"
+
 #endif
