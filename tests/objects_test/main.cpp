@@ -6,6 +6,7 @@
 // Monadic
 #include <monadic.hpp>
 #include <objects/image/image.hpp>
+#include <objects/base/number.hpp>
 
 using namespace monadic;
 using namespace monadic::filesystem;
@@ -22,6 +23,7 @@ int main ( int argc, char** argv )
         cout << blob.pop<double>() << endl;
     */
 
+    Number n;
 
     Image* img1 = new Image();
     img1->create( 1600, 1200, 8, 3 );
