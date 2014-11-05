@@ -15,8 +15,8 @@ namespace monadic
 
     int create(unsigned int width = 0, unsigned int height = 0, unsigned int depth = 0, unsigned int channels = 0 );
     
-    virtual void deserialize( std::vector< unsigned char >& dataBuffer );
-    virtual void serialize( std::vector< unsigned char >& dataBuffer );
+    virtual void deserialize( monadic::ObjectBlob* blob );
+    virtual monadic::ObjectBlob* serialize();
   
   private:
     unsigned char*_rawBuffer;
@@ -25,10 +25,7 @@ namespace monadic
     unsigned int  _depth;
     unsigned int  _channels;
     
-  };
-  
-  REGISTER_TYPE(monadic::Image, "Image");
-  
+  };  
 }
 
 

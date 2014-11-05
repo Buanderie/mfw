@@ -4,6 +4,9 @@
 // STL
 #include <vector>
 
+// INTERNAL
+#include "objectblob.hpp"
+
 namespace monadic
 {
   class Serializable
@@ -14,8 +17,8 @@ namespace monadic
     Serializable(){}
     virtual ~Serializable(){}
     
-    virtual void deserialize( std::vector< unsigned char >& dataBuffer )=0;
-    virtual void serialize( std::vector< unsigned char >& dataBuffer )=0;
+    virtual void deserialize( monadic::ObjectBlob* blob )=0;
+    virtual monadic::ObjectBlob* serialize()=0;
     
   };
 }
