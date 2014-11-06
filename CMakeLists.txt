@@ -16,10 +16,10 @@ elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Darwin" )
     ADD_DEFINITIONS( -D__MACOSX__ )
 endif()
 
-if( BUILD_TESTS )
-add_subdirectory(googletest)
-    add_subdirectory( test )
-endif( BUILD_TESTS )
-
 add_subdirectory(libmonadic)
 add_subdirectory(kernels)
+
+if( BUILD_TESTS )
+    add_subdirectory(googletest)
+    add_subdirectory( test )
+endif( BUILD_TESTS )
