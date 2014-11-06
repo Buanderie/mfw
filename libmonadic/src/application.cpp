@@ -15,7 +15,7 @@ namespace monadic
         //int ncore = boost::thread::hardware_concurrency();
         //cout << "pitaing " << ncore << " cores !" << endl;
         //_appThreadPool = boost::threadpool::prio_pool( boost::thread::hardware_concurrency() - 1 );
-        for( int k = 0; k < 4; ++k )
+        for( int k = 0; k < 7; ++k )
         {
         	_workers.push_back( new ApplicationWorker(this) );
         }
@@ -50,7 +50,7 @@ namespace monadic
     Node* Application::fetchActiveNode()
     {
     	Node* ret = NULL;
-      _nodeListMtx.lock();
+        _nodeListMtx.lock();
     	while( ret == NULL )
     	{
         // Let's forget about priorities for now
