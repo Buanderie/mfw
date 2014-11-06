@@ -21,6 +21,7 @@ monadic::String::~String()
 
 monadic::ObjectBlob *monadic::String::serialize()
 {
+	return NULL;
 }
 
 void monadic::String::deserialize(monadic::ObjectBlob *blob)

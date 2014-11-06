@@ -82,7 +82,7 @@ namespace monadic
         monadic::filesystem::Path p(nodeModulePath);
         files = p.getChildren( recursiveSearch );
 
-        for( int k = 0; k < files.size(); ++k )
+        for( size_t k = 0; k < files.size(); ++k )
         {
             if( files[k].extension() == dlibExtension )
                 retCode += load( files[k].str() );

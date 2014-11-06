@@ -40,25 +40,40 @@ namespace monadic
             bool    isRegularFile(){ return !isDirectory(); }
             bool    isDirectory()
             {
+				#if defined(__LINUX__)
                 class stat st;
                 if (stat(_pathStr.c_str(), &st) == -1)
                     return false;
                 return !((st.st_mode & S_IFDIR) == 0);
+				#elif defined(__WINDOWS__)
+				HANDLE dir;
+				WIN32_FIND_DATA file_data;
+				dir = FindFirstFile((_pathStr + "/*").c_str(), &file_data);
+				return (file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+				#endif
             }
 
             bool    exists()
             {
-                class stat buffer;
+#if defined(__LINUX__)
+                struct stat buffer;
                 return (stat (_pathStr.c_str(), &buffer) == 0);
+#elif defined(__WINDOWS__)
+				return true;
+#endif
             }
 
             size_t  size()
             {
                 if( exists() && isRegularFile() )
                 {
+					#if defined(__LINUX__)
                     struct stat st;
                     stat(_pathStr.c_str(), &st);
                     return st.st_size;
+					#elif defined(__WINDOWS__)
+					return 0;
+					#endif
                 }
                 else
                     return 0;
@@ -90,29 +105,35 @@ namespace monadic
                 std::vector< monadic::filesystem::Path > res;
 
                 #if defined(__WINDOWS__)
-                /*
                 HANDLE dir;
                 WIN32_FIND_DATA file_data;
 
-                if ((dir = FindFirstFile((directory + "/*").c_str(), &file_data)) == INVALID_HANDLE_VALUE)
-                    return; // No files found
+                if ((dir = FindFirstFile((_pathStr + "/*").c_str(), &file_data)) == INVALID_HANDLE_VALUE)
+                    return res; // No files found
 
                 do {
-                    const string file_name = file_data.cFileName;
-                    const string full_file_name = directory + "/" + file_name;
+                    const std::string file_name = file_data.cFileName;
+                    const std::string full_file_name = _pathStr + "/" + file_name;
                     const bool is_directory = (file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
                     if (file_name[0] == '.')
                         continue;
 
-                    if (is_directory)
-                        continue;
-
-                    out.push_back(full_file_name);
+					Path p(full_file_name);
+					res.push_back(p);
+					if (recursiveSearch)
+					{
+						if (p.isDirectory())
+						{
+							// Append to res, children of p
+							std::vector< monadic::filesystem::Path > subres = p.getChildren(recursiveSearch);
+							res.insert(res.end(), subres.begin(), subres.end());
+						}
+					}
+                    
                 } while (FindNextFile(dir, &file_data));
 
                 FindClose(dir);
-                */
                 #elif defined(__LINUX__)
                 DIR *dir;
                 class dirent *ent;
