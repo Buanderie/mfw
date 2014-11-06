@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
-project (MonadicFramework)
+project(MonadicFramework)
+
+option(BUILD_TESTS "Build Unit tests" ON)
 
 # Handle platform specifics
 if ( "${CMAKE_SYSTEM_NAME}" MATCHES "Windows" )
@@ -14,6 +16,10 @@ elseif( "${CMAKE_SYSTEM_NAME}" MATCHES "Darwin" )
     ADD_DEFINITIONS( -D__MACOSX__ )
 endif()
 
+if( BUILD_TESTS )
+add_subdirectory(googletest)
+    add_subdirectory( test )
+endif( BUILD_TESTS )
+
 add_subdirectory(libmonadic)
 add_subdirectory(kernels)
-add_subdirectory(tests)
