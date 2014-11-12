@@ -30,8 +30,6 @@ namespace monadic
 
     private:
         size_t                          _bufferSize;
-        size_t                          _start;
-        size_t                          _end;
         unsigned char *                 _data;
         std::vector< BipBufferElem >    _blobs;
 
