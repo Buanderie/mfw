@@ -11,6 +11,13 @@ namespace monadic
 {
     class BipBuffer
     {
+        typedef struct
+        {
+            size_t start;
+            size_t stop;
+            size_t size;
+        } BipBufferElem;
+
     public:
         BipBuffer( size_t bufferSize = 0 );
         virtual ~BipBuffer();
@@ -22,11 +29,11 @@ namespace monadic
         bool pop( void* dst );
 
     private:
-        size_t                  _bufferSize;
-        size_t                  _start;
-        size_t                  _end;
-        unsigned char *         _data;
-        std::vector< size_t >   _blobSizes;
+        size_t                          _bufferSize;
+        size_t                          _start;
+        size_t                          _end;
+        unsigned char *                 _data;
+        std::vector< BipBufferElem >    _blobs;
 
     protected:
 

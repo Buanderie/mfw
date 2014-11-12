@@ -26,7 +26,7 @@ void monadic::BipBuffer::resize(size_t size)
 
 size_t monadic::BipBuffer::size()
 {
-    return _blobSizes.size();
+    return _blobs.size();
 }
 
 bool monadic::BipBuffer::push(void *data, size_t length)
@@ -47,7 +47,9 @@ bool monadic::BipBuffer::push(void *data, size_t length)
 size_t monadic::BipBuffer::peekSize()
 {
     if( size() )
-        return *(_blobSizes.end());
+    {
+        //return *(_blobSizes.end());
+    }
     else
         return 0;
 }
