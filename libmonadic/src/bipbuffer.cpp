@@ -31,7 +31,15 @@ size_t monadic::BipBuffer::size()
 
 bool monadic::BipBuffer::push(void *data, size_t length)
 {
+
+	// Check if we have any fucking blobs in here
+	if( !_blobs.size() )
+	{
+	
+	}
+
     // check if we have enough space left at the end
+    
     if( _end + length > _bufferSize )
     {
         // not enough space
