@@ -1,6 +1,10 @@
 #ifndef __CIRCULARBUFFER_HPP__
 #define __CIRCULARBUFFER_HPP__
 
+/*
+ * http://www.asawicki.info/news_1468_circular_buffer_of_raw_binary_data_in_c.html
+ */
+
 // C
 #include <cstddef>
 
