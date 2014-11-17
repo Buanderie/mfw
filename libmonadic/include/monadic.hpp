@@ -5,6 +5,7 @@
 #include "application.hpp"
 #include "kernelmanager.hpp"
 #include "objectblob.hpp"
+#include "bipbuffer.hpp"
 
 // FILESYSTEM
 #include "filesystem.hpp"

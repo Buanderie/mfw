@@ -3,14 +3,20 @@
 #include <cstdlib>
 #include <cstring>
 
+// STL
+#include <iostream>
+
 // INTERNAL
 #include "bipbuffer.hpp"
 
-monadic::BipBuffer::BipBuffer(size_t capacity)
+using namespace std;
+
+monadic::BipBuffer::BipBuffer(size_t capacity, BipBufferStrategy strategy)
     :_capacity(capacity)
     ,_size(0)
     ,_beg_index(0)
     ,_end_index(0)
+    ,_strategy(strategy)
 {
     _data = 0;
     if( _capacity )
@@ -30,30 +36,65 @@ void monadic::BipBuffer::resize(size_t size)
 
 size_t monadic::BipBuffer::size()
 {
+    return _size;
+}
+
+size_t monadic::BipBuffer::blobs()
+{
     return _blobs.size();
 }
 
 bool monadic::BipBuffer::push( const void *data, size_t length)
 {
+    if( length >= _capacity )
+        return false;
+
     // This code assumes read and write are working
-    if( _size >= _capacity )
+    if( length >= ( _capacity - _size ) )
     {
-        // What strategy here ?
-        // Remove or refuse to push ?
+        switch( _strategy )
+        {
+            case BIPBUFFER_OVERWRITE:
+            {
+                //cout << "fuck it's full" << endl;
+                while( (_capacity - _size) < length )
+                {
+                    read(NULL, peekSize(), false);
+                    _blobs.erase( _blobs.begin() + 0 );
+                }
+                write( (const unsigned char*)data, length );
+                _blobs.push_back( length );
+                break;
+            }
+
+            case BIPBUFFER_SKIP:
+            {
+                return false;
+                break;
+            }
+
+        default:
+            break;
+        }
+
         return false;
     }
     else
     {
-        write( (const unsigned char*)data, length );
         _blobs.push_back( length );
+        write( (const unsigned char*)data, length );
+        return true;
     }
+
+    return false;
+
 }
 
 size_t monadic::BipBuffer::peekSize()
 {
-    if( size() )
+    if( size() != 0 )
     {
-        return *(_blobs.end());
+        return _blobs[ 0 ];
     }
     else
         return 0;
@@ -62,10 +103,11 @@ size_t monadic::BipBuffer::peekSize()
 bool monadic::BipBuffer::pop( const void *dst )
 {
     // If there is a blob in the buffer
-    if( size() )
+    if( size() != 0 )
     {
-        size_t blobSize = *(_blobs.end());
-        read( (const unsigned char*)dst, blobSize );
+        size_t blobSize = peekSize();
+        read( (const unsigned char*)dst, blobSize, true );
+        _blobs.erase( _blobs.begin() + 0 );
         return true;
     }
     else
@@ -106,9 +148,9 @@ size_t monadic::BipBuffer::write(const unsigned char *data, size_t bytes)
     return bytes_to_write;
 }
 
-size_t monadic::BipBuffer::read(const unsigned char *data, size_t bytes)
+size_t monadic::BipBuffer::read(const unsigned char *data, size_t bytes, bool executeOperation )
 {
-    if( !_data )
+    if( executeOperation && !_data )
         return 0;
 
     size_t capacity = _capacity;
@@ -117,7 +159,8 @@ size_t monadic::BipBuffer::read(const unsigned char *data, size_t bytes)
     // Read in a single step
     if( bytes_to_read <= capacity - _beg_index )
     {
-        memcpy( data, (const void*)(_data + _beg_index), bytes_to_read );
+        if( executeOperation )
+            memcpy( (void*)data, (const void*)(_data + _beg_index), bytes_to_read );
         _beg_index += bytes_to_read;
         if( _beg_index == _capacity )
             _beg_index = 0;
@@ -126,9 +169,11 @@ size_t monadic::BipBuffer::read(const unsigned char *data, size_t bytes)
     else
     {
         size_t size_1 = capacity - _beg_index;
-        memcpy( data, _data + _beg_index, size_1 );
+        if( executeOperation )
+            memcpy( (void*)data, (const void*)(_data + _beg_index), size_1 );
         size_t size_2 = bytes_to_read - size_1;
-        memcpy( data + size_1, _data, size_2 );
+        if( executeOperation )
+            memcpy( (void*)(data + size_1), (const void*)_data, size_2 );
         _beg_index = size_2;
     }
 

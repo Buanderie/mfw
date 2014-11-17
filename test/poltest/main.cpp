@@ -1,69 +1,47 @@
 #include <cassert>
 #include <iostream>
 
-/*
-class Base {
- public:
-  virtual size_t id() const = 0;
-  virtual const char* name() const = 0;
-  virtual ~Base() {}
-};
+#include <cstdlib>
 
-typedef Base* (*CreateFunc)(void);
+#include <monadic.hpp>
 
-class SimpleFactory {
- private:
-  static const size_t NELEM = 2;
-  static size_t id_;
-  static CreateFunc creators_[NELEM];
+using namespace std;
 
- public:
-  static size_t registerFunc(CreateFunc creator) {
-    assert(id_ < NELEM);
-    assert(creator);
-    creators_[id_] = creator;
-    return id_++;
-  }
-
-  static Base* create(size_t id) { assert(id < NELEM); return (creators_[id])(); }
-};
-
-size_t SimpleFactory::id_ = 0;
-CreateFunc SimpleFactory::creators_[NELEM];
-
-
-class D1 : public Base {
- private:
-  static Base* create() { return new D1; }
-  static const size_t id_;
-
- public:
-  size_t id() const { return id_; }
-  const char* name() const { return "D1"; }
-};
-
-const size_t D1::id_ = SimpleFactory::registerFunc(&create);
-
-class D2 : public Base {
- private:
-  static Base* create() { return new D2; }
-  static const size_t id_;
-
- public:
-  size_t id() const { return id_; }
-  const char* name() const { return "D2"; }
-};
-
-const size_t D2::id_ = SimpleFactory::registerFunc(&create);
-*/
 int main() {
-    /*
-  Base* b1 = SimpleFactory::create(0);
-  Base* b2 = SimpleFactory::create(1);
-  std::cout << "b1 name: " << b1->name() << "\tid: " << b1->id() << "\n";
-  std::cout << "b2 name: " << b2->name() << "\tid: " << b2->id() << "\n";
-  delete b1;
-  delete b2;
-  */
-  return 0;
+
+    srand(time(NULL));
+
+    for( int i = 0; i < 10000000; ++i )
+    {
+        cout << "PUSH " << i << endl;
+        size_t N = 100;
+        size_t MAXLEN = 1600*1200*3*10;
+        monadic::BipBuffer b(MAXLEN, monadic::BipBuffer::BIPBUFFER_OVERWRITE );
+        for( int k = 1; k <= N; ++k )
+        {
+            size_t blobSize = 1600*1200*3;
+            unsigned char* data = new unsigned char[blobSize];
+            b.push( data, blobSize );
+            delete data;
+            cout << "blobSize=" << blobSize << " - b.size()=" << b.size() << endl;
+        }
+
+        cout << "POP " << i << endl;
+        size_t totalSize = 0;
+        while( 1 )
+        {
+            if( b.size() <= 0 )
+                break;
+
+            size_t blobSize = b.peekSize();
+            totalSize += blobSize;
+            cout << "b.size=" << b.size() << " - peekSize=" << blobSize << endl;
+            unsigned char* data = new unsigned char[blobSize];
+            if( !b.pop(data) )
+                cout << "pop xcouille" << endl;
+            delete[] data;
+        }
+        cout << "total=" << totalSize << endl;
+    }
+    return 0;
 }

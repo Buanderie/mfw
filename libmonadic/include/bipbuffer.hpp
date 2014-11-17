@@ -16,10 +16,18 @@ namespace monadic
     class BipBuffer
     {
     public:
-        BipBuffer(size_t capacity = 0 );
+        typedef enum
+        {
+            BIPBUFFER_SKIP=0,
+            BIPBUFFER_OVERWRITE
+        } BipBufferStrategy;
+
+    public:
+        BipBuffer(size_t capacity = 0, BipBufferStrategy strategy = BIPBUFFER_OVERWRITE );
         virtual ~BipBuffer();
         void resize( size_t size );
         size_t size();
+        size_t blobs();
 
         bool push(const void *data, size_t length );
         size_t peekSize();
@@ -33,9 +41,10 @@ namespace monadic
 
         unsigned char *                 _data;
         std::vector< size_t >           _blobs;
+        BipBufferStrategy               _strategy;
 
         size_t write( const unsigned char * data, size_t bytes );
-        size_t read( const unsigned char * data, size_t bytes );
+        size_t read(const unsigned char * data, size_t bytes , bool executeOperation = true );
 
     protected:
 
