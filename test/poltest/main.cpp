@@ -10,6 +10,8 @@
 
 #include <boost/thread.hpp>
 
+#include <chrono>
+
 using namespace std;
 
 monadic::Link* lnk;

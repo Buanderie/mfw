@@ -1,3 +1,6 @@
 [submodule "googletest"]
 	path = googletest
 	url = https://github.com/Buanderie/googletest.git
+[submodule "libmonadic/include/uuid"]
+	path = libmonadic/include/uuid
+	url = https://github.com/Buanderie/UUID.git
