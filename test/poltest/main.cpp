@@ -4,11 +4,49 @@
 #include <cstdlib>
 
 #include <monadic.hpp>
+#include <objects/base/number.hpp>
+#include <objects/base/string.hpp>
+
+#include <boost/thread.hpp>
 
 using namespace std;
 
+monadic::Link* lnk;
+
+void producer()
+{
+  int i = 0;
+  for (;;)
+  {
+      //sleep(1);
+      //std::cout << "producer" << std::endl;
+      monadic::String n("i++");
+      monadic::ObjectBlob* blob = n.serialize();
+      lnk->write(blob);
+      delete blob;
+  }
+}
+
+void consumer()
+{
+  for (;;)
+  {
+    //sleep(1);
+    //std::cout << "consumer" << std::endl;
+    monadic::String n2;
+    monadic::ObjectBlob* blob2 = lnk->read();
+    if( blob2 != 0 )
+    {
+    n2.deserialize( blob2 );
+    cout << n2.getTypeName() << " " << n2.getValue() << endl;
+    delete blob2;
+    }
+  }
+}
+
 int main() {
 
+    /*
     srand(time(NULL));
 
     for( int i = 0; i < 10000000; ++i )
@@ -43,5 +81,16 @@ int main() {
         }
         cout << "total=" << totalSize << endl;
     }
+    */
+
+    lnk = new monadic::Link( 0, 0, 1024, monadic::Link::NODE_LINK_BLOCKING );
+
+
+
+    boost::thread t(producer);
+    boost::thread t2(consumer);
+
+    t.join();
+
     return 0;
 }

@@ -108,7 +108,14 @@ namespace monadic
     	for( unsigned int k = 0; k < _workers.size(); ++k )
     	{
     		_workers[k]->waitForTermination();
-    	}
+        }
+    }
+
+    Link *Application::addLink( monadic::Node *n1, monadic::Node *n2, std::size_t bandwidth, monadic::Link::LinkMode mode )
+    {
+        Link* l = new Link( n1, n2, bandwidth, mode );
+        _links.push_back( l );
+        return l;
     }
 }
 

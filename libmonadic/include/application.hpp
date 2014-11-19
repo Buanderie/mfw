@@ -15,6 +15,7 @@
 // INTERNAL
 #include "kernelmanager.hpp"
 #include "node.hpp"
+#include "link.hpp"
 #include "thread.hpp"
 #include "timeref.hpp"
 
@@ -42,6 +43,9 @@ namespace monadic
             Node* addNode( const std::string& nodeType );
             std::vector< Node* > getNodeList();
 
+            // Public Link management API
+            Link* addLink(Node *n1, Node *n2 , size_t bandwidth, Link::LinkMode mode);
+
             double getElapsedTime();
 
             Node* fetchActiveNode();
@@ -65,6 +69,9 @@ namespace monadic
             // Plugin management
             KernelManager*                      _kernelManager;
             std::string                         _pluginFolder;
+
+            // Link management
+            std::vector< Link* >                _links;
 
             // Time reference
             TimeRef _timeRef;

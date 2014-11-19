@@ -12,9 +12,11 @@ namespace monadic
     class String : public Object
     {
     public:
-        String();
+        String( const std::string& rawString = "" );
         String( const monadic::String& other );
         virtual ~String();
+
+        std::string getValue(){ return _value; }
 
         virtual ObjectBlob * serialize();
         virtual void deserialize(ObjectBlob *blob);

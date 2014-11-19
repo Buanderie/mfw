@@ -3,8 +3,13 @@
 #include <cstdlib>
 #include <cstring>
 
+// STL
+#include <iostream>
+
 // INTERNAL
 #include "objectblob.hpp"
+
+using namespace std;
 
 monadic::ObjectBlob::ObjectBlob(const std::string &typeName, const size_t blobSize)
     :_typeName(typeName), _blobSize(blobSize)
@@ -16,15 +21,48 @@ monadic::ObjectBlob::ObjectBlob(const std::string &typeName, const size_t blobSi
     _poppedSize = 0;
 }
 
+monadic::ObjectBlob::ObjectBlob(void *ptr, std::size_t size)
+{
+    _data = 0;
+    if( size <= monadic::ObjectBlob::OBJECT_BLOB_NAME_LENGTH )
+    {
+        // throw something
+    }
+    else
+    {
+        _blobSize = size - monadic::ObjectBlob::OBJECT_BLOB_NAME_LENGTH;
+        reserve( _blobSize );
+        memcpy( _data, ptr, size );
+        size_t strNameSize = (size_t)(_data[0]);
+        char* strName = new char[ strNameSize ];
+        memcpy( strName, _data + 1, strNameSize );
+        _typeName = strName;
+        delete[] strName;
+        _poppedSize = 0;
+        _pushedSize = _blobSize;
+    }
+}
+
 monadic::ObjectBlob::~ObjectBlob()
 {
-    free(_data);
+    /*
+    cout << _blobSize << endl;
+    cout << _poppedSize << endl;
+    cout << _pushedSize << endl;
+    cout << _typeName << endl;
+    */
+    free( (void*)_data );
 }
 
 void *monadic::ObjectBlob::data()
 {
     //return (void*)(_data + monadic::ObjectBlob::OBJECT_BLOB_NAME_LENGTH);
     return (void*)(_data);
+}
+
+std::size_t monadic::ObjectBlob::data_size()
+{
+    return monadic::ObjectBlob::OBJECT_BLOB_NAME_LENGTH + _blobSize;
 }
 
 
@@ -41,12 +79,14 @@ void monadic::ObjectBlob::pushArray(void *ptr, size_t size)
 
     unsigned char* dPtr = (_data + OBJECT_BLOB_NAME_LENGTH + _pushedSize );
     memcpy( dPtr, ptr, size );
+    _pushedSize += size;
 }
 
 void monadic::ObjectBlob::popArray(void *ptr, size_t size )
 {
     unsigned char* dPtr = (_data + OBJECT_BLOB_NAME_LENGTH + _poppedSize );
-    memcpy( dPtr, ptr, size );
+    memcpy( ptr, dPtr, size );
+    _poppedSize += size;
 }
 
 

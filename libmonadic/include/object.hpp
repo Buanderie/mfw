@@ -33,9 +33,10 @@ namespace monadic
       virtual monadic::ObjectBlob* serialize()=0;
 
     private:
-      std::string _typeName;
+
             
     protected:
+      std::string _typeName;
     
   };
 }

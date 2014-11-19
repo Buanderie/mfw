@@ -4,10 +4,10 @@
 
 using namespace monadic;
 
-monadic::Number::Number()
+monadic::Number::Number( double rawValue )
     :Object("Number")
 {
-
+    _value = rawValue;
 }
 
 monadic::ObjectBlob *monadic::Number::serialize()

@@ -12,8 +12,11 @@ namespace monadic
 
     public:
         ObjectBlob( const std::string& typeName, const size_t blobSize = 0 );
+        ObjectBlob( void* ptr, std::size_t size );
+
         virtual ~ObjectBlob();
         void* data();
+        std::size_t data_size();
         void reserve( const size_t size );
 
         template<class T> void push( const T& elem )
