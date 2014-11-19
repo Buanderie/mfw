@@ -6,6 +6,7 @@
 #include <monadic.hpp>
 #include <objects/base/number.hpp>
 #include <objects/base/string.hpp>
+#include <objects/image/image.hpp>
 
 #include <boost/thread.hpp>
 
@@ -20,8 +21,9 @@ void producer()
   {
       //sleep(1);
       //std::cout << "producer" << std::endl;
-      monadic::String n("i++");
-      monadic::ObjectBlob* blob = n.serialize();
+      monadic::Image img;
+      img.create( 1 + rand()%3480, 1 + rand()%2160, 8, 3 );
+      monadic::ObjectBlob* blob = img.serialize();
       lnk->write(blob);
       delete blob;
   }
@@ -32,23 +34,28 @@ void consumer()
   for (;;)
   {
     //sleep(1);
+    Timer t;
+    t.start();
     //std::cout << "consumer" << std::endl;
-    monadic::String n2;
+    monadic::Image n2;
     monadic::ObjectBlob* blob2 = lnk->read();
     if( blob2 != 0 )
     {
     n2.deserialize( blob2 );
-    cout << n2.getTypeName() << " " << n2.getValue() << endl;
+    //cout << n2.getTypeName() << endl;
     delete blob2;
     }
+    t.stop();
+    double tt = t.getElapsedTimeInSec();
+    cout << 1.0 / tt << " fps" << endl;
   }
 }
 
 int main() {
 
-    /*
-    srand(time(NULL));
 
+    srand(time(NULL));
+    /*
     for( int i = 0; i < 10000000; ++i )
     {
         cout << "PUSH " << i << endl;
@@ -83,14 +90,20 @@ int main() {
     }
     */
 
-    lnk = new monadic::Link( 0, 0, 1024, monadic::Link::NODE_LINK_BLOCKING );
+    lnk = new monadic::Link( 0, 0, 1000457280, monadic::Link::NODE_LINK_BLOCKING );
 
 
 
     boost::thread t(producer);
     boost::thread t2(consumer);
 
-    t.join();
+    for(;;)
+    {
+        sleep(1);
+        cout << "occupation: " << lnk->occupation() << endl;
+
+
+    }
 
     return 0;
 }

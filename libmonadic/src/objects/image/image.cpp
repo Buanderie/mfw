@@ -37,7 +37,7 @@ void monadic::Image::deserialize( monadic::ObjectBlob* blob )
         delete[] _rawBuffer;
     _rawBuffer = new unsigned char[ memsz ];
     blob->popArray( (void*)_rawBuffer, memsz );
-    cout << "width=" << _width << " - height=" << _height << endl;
+    //cout << "width=" << _width << " - height=" << _height << endl;
 }
 
 monadic::ObjectBlob* monadic::Image::serialize()

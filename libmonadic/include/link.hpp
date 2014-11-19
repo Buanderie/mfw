@@ -27,6 +27,7 @@ namespace monadic
 
         void write( monadic::ObjectBlob* blob );
         monadic::ObjectBlob* read();
+        std::size_t occupation();
 
 
     private:

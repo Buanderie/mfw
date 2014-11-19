@@ -99,3 +99,12 @@ monadic::ObjectBlob *monadic::Link::read()
     _linkMtx.unlock();
     return blob;
 }
+
+size_t Link::occupation()
+{
+    size_t ret = 0;
+    _linkMtx.lock();
+    ret = _buffer->size();
+    _linkMtx.unlock();
+    return ret;
+}
