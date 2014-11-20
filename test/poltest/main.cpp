@@ -10,7 +10,6 @@
 
 #include <boost/thread.hpp>
 
-#include <chrono>
 
 using namespace std;
 
@@ -35,7 +34,7 @@ void consumer()
 {
   for (;;)
   {
-    //sleep(1);
+    sleep(1);
     Timer t;
     t.start();
     //std::cout << "consumer" << std::endl;
@@ -44,7 +43,7 @@ void consumer()
     if( blob2 != 0 )
     {
     n2.deserialize( blob2 );
-    //cout << n2.getTypeName() << endl;
+    //cout <<  << endl;
     delete blob2;
     }
     t.stop();
@@ -92,7 +91,7 @@ int main() {
     }
     */
 
-    lnk = new monadic::Link( 0, 0, 1000457280, monadic::Link::NODE_LINK_BLOCKING );
+    lnk = new monadic::Link( 0, 0, 1000457280, monadic::Link::NODE_LINK_NONBLOCKING );
 
 
 
