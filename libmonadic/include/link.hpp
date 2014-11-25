@@ -9,10 +9,11 @@
 #include "thread.hpp"
 #include "objectblob.hpp"
 #include "bipbuffer.hpp"
+#include "identifiable.hpp"
 
 namespace monadic
 {
-    class Link
+    class Link : public monadic::Identifiable
     {
     public:
         // Typedefs

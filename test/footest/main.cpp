@@ -134,9 +134,11 @@ int main ( int argc, char** argv )
         cout << "t=" << app.getElapsedTime() << endl;
         for( int k = 0; k < app._nodes.size(); ++k )
         {
-            cout    << "NODE " << (unsigned long)app._nodes[k] << " - " 
+		/*
+            cout    << "NODE " << app._nodes[k]->getGuid() << " - " 
                     << app._nodes[k]->getKernelName() << " state: " << app._nodes[k]->getState()
                     << endl;
+		*/
         }
         cout << endl;
         #ifdef __WINDOWS__

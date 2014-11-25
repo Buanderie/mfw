@@ -6,6 +6,7 @@
 
 // STL
 #include <vector>
+#include <queue>
 #include <iostream>
 #include <string>
 
@@ -18,6 +19,7 @@
 #include "link.hpp"
 #include "thread.hpp"
 #include "timeref.hpp"
+#include "guid.hpp"
 
 using namespace std;
 
@@ -42,16 +44,20 @@ namespace monadic
             // Public Node management API
             Node* addNode( const std::string& nodeType );
             std::vector< Node* > getNodeList();
-
+	    
             // Public Link management API
-            Link* addLink(Node *n1, Node *n2 , size_t bandwidth, Link::LinkMode mode);
+            // THIS IS NOT LOGICAL
+            Link* addLink(Node *n1, Node *n2, size_t bandwidth, Link::LinkMode mode);
+            monadic::Guid addLink( const monadic::Guid& n1, const monadic::Guid& n2, const monadic::Guid& pin1, const monadic::Guid& pin2, size_t bandwidth, Link::LinkMode mode );
 
             double getElapsedTime();
 
             Node* fetchActiveNode();
             void releaseNode(Node* node);
 
-            std::vector< Node* >                _nodes;
+            //std::vector< Node* >                _nodes;
+            std::map< monadic::Guid, Node* >	_nodes;
+            std::queue< Node* >                 _nodeQueue;
 
         protected:
         

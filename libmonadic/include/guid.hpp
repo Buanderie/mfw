@@ -84,6 +84,7 @@ std::ostream &operator<<( std::ostream &s, const monadic::Guid &guid);
 // each platform, but the use of newGuid is uniform.
 class GuidGenerator
 {
+public:
     GuidGenerator() { }
     Guid newGuid();
 };

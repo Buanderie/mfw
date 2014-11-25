@@ -45,18 +45,11 @@ monadic::ObjectBlob::ObjectBlob(void *ptr, std::size_t size)
 
 monadic::ObjectBlob::~ObjectBlob()
 {
-    /*
-    cout << _blobSize << endl;
-    cout << _poppedSize << endl;
-    cout << _pushedSize << endl;
-    cout << _typeName << endl;
-    */
     free( (void*)_data );
 }
 
 void *monadic::ObjectBlob::data()
 {
-    //return (void*)(_data + monadic::ObjectBlob::OBJECT_BLOB_NAME_LENGTH);
     return (void*)(_data);
 }
 

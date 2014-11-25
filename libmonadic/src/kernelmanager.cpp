@@ -97,6 +97,7 @@ namespace monadic
     
     Node* KernelManager::create( const std::string& kernelName )
     {
+        // /!\ TODO
         // THIS COULD CRASH IF KERNEL DOESN'T EXIST
         Kernel ent = _kernelRegistry[ kernelName ];
         Node* nNode = ent.create();

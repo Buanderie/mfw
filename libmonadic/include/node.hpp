@@ -15,10 +15,11 @@
 #endif
 
 // INTERNAL
+#include "identifiable.hpp"
 
 namespace monadic
 {
-    class Node
+    class Node : public Identifiable
     {
     
     friend class KernelManager;
@@ -37,7 +38,8 @@ namespace monadic
         } NodeState;
 
         Node():_priority(1),_nodeState(NODE_ACTIVE)
-        {}
+        {
+	}
         
         virtual ~Node(){}
         

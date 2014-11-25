@@ -15,7 +15,7 @@ namespace monadic
         //int ncore = boost::thread::hardware_concurrency();
         //cout << "pitaing " << ncore << " cores !" << endl;
         //_appThreadPool = boost::threadpool::prio_pool( boost::thread::hardware_concurrency() - 1 );
-        for( int k = 0; k < 7; ++k )
+        for( int k = 0; k < 16; ++k )
         {
         	_workers.push_back( new ApplicationWorker(this) );
         }
@@ -28,9 +28,9 @@ namespace monadic
 
     void Application::start()
     {
-
-        for( int k = 0; k < _nodes.size(); ++k )
-            _nodes[k]->setup();
+	map< monadic::Guid, Node* >::iterator nitr;
+        for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
+            nitr->second->setup();
 
     	for( unsigned int k = 0; k < _workers.size(); ++k )
     	{
@@ -53,17 +53,18 @@ namespace monadic
         _nodeListMtx.lock();
     	while( ret == NULL )
     	{
-        // Let's forget about priorities for now
-    		for( unsigned int k = 0; k < _nodes.size(); ++k )
+		map< monadic::Guid, Node* >::iterator nitr;
+        	// Let's forget about priorities for now
+    		for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
     		{
-    			if( _nodes[k]->getState() == Node::NODE_ACTIVE )
+    			if( nitr->second->getState() == Node::NODE_ACTIVE )
     			{
-    				ret = _nodes[k];
+    				ret = nitr->second;
     				break;
     			}
     		}
 
-        // Found one to be processed
+        	// Found one to be processed
     		if( ret != NULL )
     		{
     			ret->_nodeState = Node::NODE_BUSY;
@@ -80,17 +81,19 @@ namespace monadic
 
     void Application::releaseNode( Node* node )
     {
+	map< monadic::Guid, Node* >::iterator nitr;
     	_nodeListMtx.lock();
-    	for( int k = 0; k < _nodes.size(); ++k )
+    	for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
     	{
-    		if( node == _nodes[k] )
+    		if( node == nitr->second )
     		{
     			if( node->getState() == Node::NODE_BUSY )
-    				_nodes[k]->_nodeState = Node::NODE_ACTIVE;
+    				nitr->second->_nodeState = Node::NODE_ACTIVE;
     			// lol ugly
-    			_nodes.erase( _nodes.begin() + k );
-    			_nodes.push_back( node );
+    			//_nodes.erase( nitr->second->getGuid() );
+    			//_nodes.insert( nitr- );
     			//
+
     			_nodeListCnd.signal();
     			break;
     		}
@@ -114,6 +117,7 @@ namespace monadic
     Link *Application::addLink( monadic::Node *n1, monadic::Node *n2, std::size_t bandwidth, monadic::Link::LinkMode mode )
     {
         Link* l = new Link( n1, n2, bandwidth, mode );
+	l->resetGuid();
         _links.push_back( l );
         return l;
     }
@@ -122,7 +126,8 @@ namespace monadic
 monadic::Node* monadic::Application::addNode( const std::string& nodeType )
 {
     Node* n = _kernelManager->create( nodeType );
-    _nodes.push_back( n );
+    n->resetGuid();
+    //_nodes.insert( make_pair( n->getGuid(), n ) );
     return n;
 }
 
