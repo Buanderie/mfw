@@ -151,7 +151,21 @@ bool monadic::Guid::operator==(const monadic::Guid &other) const
 // overload inequality operator
 bool monadic::Guid::operator!=(const monadic::Guid &other) const
 {
-  return !((*this) == other);
+    return !((*this) == other);
+}
+
+bool monadic::Guid::operator <(const monadic::Guid &other) const
+{
+    bool ret = false;
+    for( size_t k = 0; k < _bytes.size(); ++k )
+    {
+        if( _bytes[k] < other._bytes[k] )
+        {
+            ret = true;
+            break;
+        }
+    }
+    return ret;
 }
 
 // This is the linux friendly implementation, but it could work on other

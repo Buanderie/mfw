@@ -15,7 +15,7 @@ namespace monadic
         //int ncore = boost::thread::hardware_concurrency();
         //cout << "pitaing " << ncore << " cores !" << endl;
         //_appThreadPool = boost::threadpool::prio_pool( boost::thread::hardware_concurrency() - 1 );
-        for( int k = 0; k < 16; ++k )
+        for( int k = 0; k < 8; ++k )
         {
         	_workers.push_back( new ApplicationWorker(this) );
         }
@@ -28,9 +28,11 @@ namespace monadic
 
     void Application::start()
     {
-	map< monadic::Guid, Node* >::iterator nitr;
+        map< monadic::Guid, Node* >::iterator nitr;
         for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
+        {
             nitr->second->setup();
+        }
 
     	for( unsigned int k = 0; k < _workers.size(); ++k )
     	{
@@ -50,55 +52,64 @@ namespace monadic
     Node* Application::fetchActiveNode()
     {
     	Node* ret = NULL;
-        _nodeListMtx.lock();
-    	while( ret == NULL )
-    	{
-		map< monadic::Guid, Node* >::iterator nitr;
-        	// Let's forget about priorities for now
-    		for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
-    		{
-    			if( nitr->second->getState() == Node::NODE_ACTIVE )
-    			{
-    				ret = nitr->second;
-    				break;
-    			}
-    		}
 
-        	// Found one to be processed
-    		if( ret != NULL )
-    		{
-    			ret->_nodeState = Node::NODE_BUSY;
-    			break;
-    		}
-    		else
-    		{
-    			_nodeListCnd.wait( _nodeListMtx );
-    		}
-    	}
-    	_nodeListMtx.unlock();
-    	return ret;
+        _nodeListMtx.lock();
+        // Update the queue if needed
+        map< monadic::Guid, monadic::Node* >::iterator nitr;
+        for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
+        {
+            if( nitr->second->getState() == Node::NODE_REQUESTING_ACTIVATION )
+            {
+                nitr->second->setState( Node::NODE_ACTIVE );
+                cout << "pushing " << nitr->second->getGuid() << " to the stack" << endl;
+                _nodeQueue.push( nitr->second );
+                _nodeListCnd.signal();
+            }
+            else if( nitr->second->getState() == Node::NODE_REQUESTING_DEACTIVATION )
+            {
+                nitr->second->setState( Node::NODE_INACTIVE );
+            }
+        }
+        _nodeListMtx.unlock();
+        //
+
+        _nodeListMtx.lock();
+        while(1)
+        {
+            if( _nodeQueue.size() > 0 )
+            {
+                //cout << "queue size = " << dec << _nodeQueue.size() << endl;
+                Node* n = _nodeQueue.front();
+                _nodeQueue.pop();
+                ret = n;
+            }
+
+            if( ret == NULL )
+            {
+                _nodeListCnd.wait( _nodeListMtx );
+            }
+            else
+            {
+                ret->_nodeState = Node::NODE_BUSY;
+                break;
+            }
+        }
+        _nodeListMtx.unlock();
+
+        return ret;
     }
 
     void Application::releaseNode( Node* node )
     {
-	map< monadic::Guid, Node* >::iterator nitr;
-    	_nodeListMtx.lock();
-    	for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
-    	{
-    		if( node == nitr->second )
-    		{
-    			if( node->getState() == Node::NODE_BUSY )
-    				nitr->second->_nodeState = Node::NODE_ACTIVE;
-    			// lol ugly
-    			//_nodes.erase( nitr->second->getGuid() );
-    			//_nodes.insert( nitr- );
-    			//
-
-    			_nodeListCnd.signal();
-    			break;
-    		}
-    	}
-    	_nodeListMtx.unlock();
+        //cout << "lol imactive" << endl;
+        _nodeListMtx.lock();
+        if( node->_nodeState == Node::NODE_BUSY )
+        {
+            node->_nodeState = Node::NODE_ACTIVE;
+            _nodeQueue.push( node );
+            _nodeListCnd.signal();
+        }
+        _nodeListMtx.unlock();
     }
 
     void Application::stop()
@@ -114,26 +125,60 @@ namespace monadic
         }
     }
 
-    Link *Application::addLink( monadic::Node *n1, monadic::Node *n2, std::size_t bandwidth, monadic::Link::LinkMode mode )
+    Link *Application::addLink( monadic::Pin* pin1, monadic::Pin* pin2, std::size_t bandwidth, monadic::Link::LinkMode mode )
     {
-        Link* l = new Link( n1, n2, bandwidth, mode );
-	l->resetGuid();
+        Link* l = new Link( pin1, pin2, bandwidth, mode );
+        l->resetGuid();
         _links.push_back( l );
         return l;
     }
+
+    Node *Application::getNode(const Guid &guid)
+    {
+        map< monadic::Guid, Node* >::iterator nitr;
+        if( nitr != _nodes.end() )
+            return nitr->second;
+        else
+            return 0;
+    }
+
+    void Application::enableAllNodes()
+    {
+        map< monadic::Guid, monadic::Node* >::iterator nitr;
+        for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
+        {
+            nitr->second->enable();
+        }
+    }
+
 }
 
 monadic::Node* monadic::Application::addNode( const std::string& nodeType )
 {
     Node* n = _kernelManager->create( nodeType );
     n->resetGuid();
-    //_nodes.insert( make_pair( n->getGuid(), n ) );
+    _nodes.insert( make_pair( n->getGuid(), n ) );
     return n;
 }
 
-std::vector< monadic::Node* > getNodeList()
+std::vector< monadic::Guid > monadic::Application::getNodeIds()
+{
+    std::vector< monadic::Guid > res;
+    map< monadic::Guid, monadic::Node* >::iterator nitr;
+    for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
+    {
+        res.push_back( nitr->first );
+    }
+    return res;
+}
+
+vector< monadic::Node* > monadic::Application::getNodes()
 {
     std::vector< monadic::Node* > res;
-
+    map< monadic::Guid, monadic::Node* >::iterator nitr;
+    for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
+    {
+        res.push_back( nitr->second );
+    }
     return res;
 }

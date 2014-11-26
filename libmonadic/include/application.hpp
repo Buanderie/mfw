@@ -43,21 +43,19 @@ namespace monadic
 
             // Public Node management API
             Node* addNode( const std::string& nodeType );
-            std::vector< Node* > getNodeList();
+            std::vector< monadic::Guid > getNodeIds();
+            std::vector< monadic::Node* > getNodes();
+            Node* getNode( const monadic::Guid& guid );
+            void enableAllNodes();
 	    
             // Public Link management API
-            // THIS IS NOT LOGICAL
-            Link* addLink(Node *n1, Node *n2, size_t bandwidth, Link::LinkMode mode);
+            Link* addLink( monadic::Pin* pin1, monadic::Pin* pin2, std::size_t bandwidth, monadic::Link::LinkMode mode );
             monadic::Guid addLink( const monadic::Guid& n1, const monadic::Guid& n2, const monadic::Guid& pin1, const monadic::Guid& pin2, size_t bandwidth, Link::LinkMode mode );
 
             double getElapsedTime();
 
             Node* fetchActiveNode();
             void releaseNode(Node* node);
-
-            //std::vector< Node* >                _nodes;
-            std::map< monadic::Guid, Node* >	_nodes;
-            std::queue< Node* >                 _nodeQueue;
 
         protected:
         
@@ -75,6 +73,10 @@ namespace monadic
             // Plugin management
             KernelManager*                      _kernelManager;
             std::string                         _pluginFolder;
+
+            //std::vector< Node* >                _nodes;
+            std::map< monadic::Guid, Node* >	_nodes;
+            std::queue< Node* >                 _nodeQueue;
 
             // Link management
             std::vector< Link* >                _links;

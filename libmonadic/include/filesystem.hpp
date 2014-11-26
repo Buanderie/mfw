@@ -41,7 +41,7 @@ namespace monadic
             bool    isDirectory()
             {
 				#if defined(__LINUX__)
-                class stat st;
+                struct stat st;
                 if (stat(_pathStr.c_str(), &st) == -1)
                     return false;
                 return !((st.st_mode & S_IFDIR) == 0);
@@ -136,8 +136,8 @@ namespace monadic
                 FindClose(dir);
                 #elif defined(__LINUX__)
                 DIR *dir;
-                class dirent *ent;
-                class stat st;
+                struct dirent *ent;
+                struct stat st;
                 dir = opendir(_pathStr.c_str());
                 while ((ent = readdir(dir)) != NULL)
                 {

@@ -5,7 +5,6 @@
 #include <cstddef>
 
 // INTERNAL
-#include "node.hpp"
 #include "thread.hpp"
 #include "objectblob.hpp"
 #include "bipbuffer.hpp"
@@ -13,6 +12,8 @@
 
 namespace monadic
 {
+    class Pin;
+    class Node;
     class Link : public monadic::Identifiable
     {
     public:
@@ -23,7 +24,7 @@ namespace monadic
             NODE_LINK_NONBLOCKING
         } LinkMode;
 
-        Link( monadic::Node* n1, monadic::Node* n2, std::size_t bandwidth, monadic::Link::LinkMode mode );
+        Link( monadic::Pin* pin1, monadic::Pin* pin2, std::size_t bandwidth, monadic::Link::LinkMode mode );
         virtual ~Link();
 
         void write( monadic::ObjectBlob* blob );
@@ -32,8 +33,8 @@ namespace monadic
 
 
     private:
-        monadic::Node*      _n1;
-        monadic::Node*      _n2;
+        monadic::Pin*       _p1;
+        monadic::Pin*       _p2;
         std::size_t         _bandwidth;
         LinkMode            _mode;
         monadic::Mutex      _linkMtx;

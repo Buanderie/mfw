@@ -5,13 +5,12 @@
 using namespace std;
 using namespace monadic;
 
-monadic::Link::Link( monadic::Node* n1, monadic::Node* n2, std::size_t bandwidth, monadic::Link::LinkMode mode )
-    :_n1(n1)
-    ,_n2(n2)
+monadic::Link::Link(Pin *pin1, Pin *pin2, std::size_t bandwidth, monadic::Link::LinkMode mode )
+    :_p1(pin1)
+    ,_p2(pin2)
     ,_bandwidth(bandwidth)
     ,_mode(mode)
     ,_buffer(0)
-
 {
     monadic::BipBuffer::BipBufferStrategy strategy;
     switch( _mode )

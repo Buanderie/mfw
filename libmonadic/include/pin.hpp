@@ -6,11 +6,19 @@
 
 // STL
 #include <string>
+#include <vector>
+
+// INTERNAL
+#include "identifiable.hpp"
+#include "link.hpp"
+#include "thread.hpp"
+#include "objectblob.hpp"
 
 namespace monadic
 {
-    class Pin
+    class Pin : public Identifiable
     {
+
     public:
         // Typedefs
         typedef enum
@@ -22,9 +30,13 @@ namespace monadic
         Pin(const std::string& name, monadic::Pin::PinMode mode);
         virtual ~Pin();
 
+        bool write( monadic::ObjectBlob* blob );
+        std::vector< monadic::ObjectBlob* > read();
+
     private:
-        std::string _name;
-        PinMode     _mode;
+        std::string                     _name;
+        PinMode                         _mode;
+        std::vector< monadic::Link* >   _links;
 
     protected:
 

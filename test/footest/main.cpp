@@ -126,25 +126,28 @@ int main ( int argc, char** argv )
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
-
+    app.enableAllNodes();
     app.start();
 	
     while(1)
     {
         cout << "t=" << app.getElapsedTime() << endl;
-        for( int k = 0; k < app._nodes.size(); ++k )
+
+        vector< monadic::Node* > nodes = app.getNodes();
+        for( int k = 0; k < nodes.size(); ++k )
         {
-		/*
-            cout    << "NODE " << app._nodes[k]->getGuid() << " - " 
-                    << app._nodes[k]->getKernelName() << " state: " << app._nodes[k]->getState()
+
+            cout    << "NODE " << nodes[k]->getGuid() << " - "
+                    << nodes[k]->getKernelName() << " state: " << nodes[k]->getState()
                     << endl;
-		*/
+
         }
+
         cout << endl;
         #ifdef __WINDOWS__
         Sleep(1000);
         #else
-        sleep(1);
+        usleep(1000000);
         #endif
     }
 

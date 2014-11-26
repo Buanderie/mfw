@@ -63,6 +63,7 @@ public:
     // overload equality and inequality operator
     bool operator==(const Guid &other) const;
     bool operator!=(const Guid &other) const;
+    bool operator<(const Guid &other) const;
 
 private:
 

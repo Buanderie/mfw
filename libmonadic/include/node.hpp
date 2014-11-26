@@ -16,9 +16,13 @@
 
 // INTERNAL
 #include "identifiable.hpp"
+#include "thread.hpp"
+#include "pin.hpp"
+
 
 namespace monadic
 {
+    class Application;
     class Node : public Identifiable
     {
     
@@ -29,17 +33,23 @@ namespace monadic
     protected:
         std::string     _kernelName;
 
+        // Pins
+        std::vector< monadic::Pin * > _pins;
+
     public:
 
         typedef enum{
             NODE_INACTIVE=0,
             NODE_ACTIVE,
-            NODE_BUSY
+            NODE_BUSY,
+            NODE_REQUESTING_ACTIVATION,
+            NODE_REQUESTING_DEACTIVATION
         } NodeState;
 
         Node():_priority(1),_nodeState(NODE_ACTIVE)
         {
-	}
+
+        }
         
         virtual ~Node(){}
         
@@ -52,24 +62,36 @@ namespace monadic
         unsigned int getPriority(){ return _priority; }
         void setPriority( unsigned int priority ){ _priority = priority; }
         
-        void enable(){ _nodeState = NODE_ACTIVE; }
-        void disable(){ _nodeState = NODE_INACTIVE; }
+        void enable();
+        void disable();
 
         NodeState getState(){
-            return _nodeState;
+            NodeState ret;
+            _nodeMtx.lock();
+            ret = _nodeState;
+            _nodeMtx.unlock();
+            return ret;
+        }
+
+        void setState( Node::NodeState state )
+        {
+            _nodeMtx.lock();
+            _nodeState = state;
+            _nodeMtx.unlock();
         }
         
         virtual void setup()=0;
         virtual void tick( double dTime )=0;
         unsigned int getTickCount(){ return _tickCount; }
 
-		
     private:
-        void*           _nodeThread;
-        std::string     _nodeName;
-        unsigned int    _priority;
-        NodeState       _nodeState;
-        unsigned int    _tickCount;
+        monadic::Application*   _parentApp;
+        std::string             _nodeName;
+        unsigned int            _priority;
+        NodeState               _nodeState;
+        unsigned int            _tickCount;
+        monadic::Mutex          _nodeMtx;
+
     };
 }
 

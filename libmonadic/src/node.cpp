@@ -3,6 +3,8 @@
 // INTERNAL 
 #include "node.hpp"
 
+using namespace monadic;
+
 namespace monadic
 {
     void Node::start()
@@ -18,5 +20,20 @@ namespace monadic
             this->tick( 0.0 );
         }
     */
+    }
+
+    void Node::enable()
+    {
+        cout << "Enabling " << _guid << endl;
+        _nodeMtx.lock();
+        _nodeState = Node::NODE_REQUESTING_ACTIVATION;
+        _nodeMtx.unlock();
+    }
+
+    void Node::disable()
+    {
+        _nodeMtx.lock();
+        _nodeState = Node::NODE_REQUESTING_DEACTIVATION;
+        _nodeMtx.unlock();
     }
 }

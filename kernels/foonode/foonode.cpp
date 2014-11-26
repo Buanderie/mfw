@@ -5,7 +5,9 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstring>
-//#include <unistd.h>
+
+#include <objects/base/number.hpp>
+
 using namespace std;
 
 MONADIC_NODE_EXPORT( FooNode, "Foo" )
@@ -25,6 +27,7 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
 
     void FooNode::setup()
     {
+        //cout << " SETUP SETUP SETUP " << endl;
         std::cout << "FooNode::setup()" << std::endl;
         _cpt = 0;
         //pol.open("foo.txt");
@@ -36,6 +39,7 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
 
     void FooNode::tick( double dt )
     {
+        //cout << " TICK TICK TICK " << endl;
         //std::cout << "Foo: " << _cpt << std::endl;
 		_cpt++;
 		cout << "--start" << endl;
@@ -49,6 +53,14 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
         {
             disable();
         }
+
+        /*
+        monadic::Number n(753.0);
+        for( size_t k = 0; k < _pins.size(); ++k )
+        {
+            _pins[k]->write( n.serialize() );
+        }
+        */
 
         //pol << _cpt << endl;
     }
