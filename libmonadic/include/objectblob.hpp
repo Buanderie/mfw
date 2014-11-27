@@ -39,6 +39,8 @@ namespace monadic
         void pushArray( void* ptr, size_t size );
         void popArray(void* ptr, size_t size);
 
+        std::string getTypeName();
+
     private:
         std::string     _typeName;
         size_t          _blobSize;

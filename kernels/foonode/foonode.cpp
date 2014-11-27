@@ -9,6 +9,7 @@
 #include <objects/base/number.hpp>
 
 using namespace std;
+using namespace monadic;
 
 MONADIC_NODE_EXPORT( FooNode, "Foo" )
 
@@ -39,28 +40,19 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
 
     void FooNode::tick( double dt )
     {
-        //cout << " TICK TICK TICK " << endl;
-        //std::cout << "Foo: " << _cpt << std::endl;
-		_cpt++;
-		cout << "--start" << endl;
-		for( int i = 0; i < 1000000; ++i )
-		{
-		    double k = exp( pow(limit,3.5) + 0.001 ) * log( 2.0 );
-		}
-		cout << "--end" << endl;
-		cout << "cpt==" << _cpt << "/" << limit << endl;
-        if( _cpt == limit )
+        monadic::Number n( 1234.0 );
+        if( _pins.size() > 0 )
         {
-            disable();
-        }
-
-        /*
-        monadic::Number n(753.0);
         for( size_t k = 0; k < _pins.size(); ++k )
         {
-            _pins[k]->write( n.serialize() );
+            ObjectBlob* b = n.serialize();
+            _pins[k]->write( b );
+            cout << getGuid() << " sent number " << n.getValue() << endl;
+            delete b;
         }
-        */
-
-        //pol << _cpt << endl;
+        }
+        else
+        {
+            cout << getGuid() << " - NOPE" << endl;
+        }
     }

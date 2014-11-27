@@ -11,7 +11,7 @@ namespace monadic
             //cout << "loulou" << endl;
 			while( 1 )
 			{
-                cout << "Fetching new node" << endl;
+                //cout << "Fetching new node" << endl;
                 Node* n = _app->fetchActiveNode();
                 //  cout << "##### n=" << (unsigned int)(n) << endl;
                 //double startTime = _app->getElapsedTime();

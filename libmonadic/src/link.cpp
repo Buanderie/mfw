@@ -1,6 +1,7 @@
 
 // INTERNAL
 #include "link.hpp"
+#include "pin.hpp"
 
 using namespace std;
 using namespace monadic;
@@ -27,8 +28,9 @@ monadic::Link::Link(Pin *pin1, Pin *pin2, std::size_t bandwidth, monadic::Link::
         strategy = BipBuffer::BIPBUFFER_OVERWRITE;
         break;
     }
-
     _buffer = new monadic::BipBuffer( _bandwidth, strategy );
+    _p1->addLink( this );
+    _p2->addLink( this );
 }
 
 monadic::Link::~Link()

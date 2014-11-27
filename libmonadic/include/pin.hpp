@@ -19,6 +19,8 @@ namespace monadic
     class Pin : public Identifiable
     {
 
+        friend class Link;
+
     public:
         // Typedefs
         typedef enum
@@ -32,11 +34,14 @@ namespace monadic
 
         bool write( monadic::ObjectBlob* blob );
         std::vector< monadic::ObjectBlob* > read();
+        std::string getLabel(){ return _name; }
 
     private:
         std::string                     _name;
         PinMode                         _mode;
         std::vector< monadic::Link* >   _links;
+
+        void addLink( Link* l );
 
     protected:
 

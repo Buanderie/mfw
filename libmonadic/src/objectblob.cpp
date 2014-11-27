@@ -82,6 +82,11 @@ void monadic::ObjectBlob::popArray(void *ptr, size_t size )
     _poppedSize += size;
 }
 
+string monadic::ObjectBlob::getTypeName()
+{
+    return this->_typeName;
+}
+
 
 void monadic::ObjectBlob::markObjectName()
 {

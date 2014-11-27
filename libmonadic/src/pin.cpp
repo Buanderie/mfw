@@ -20,10 +20,12 @@ bool monadic::Pin::write(monadic::ObjectBlob *blob)
 {
     if( this->_mode == Pin::NODE_INPUT_PIN )
     {
+        cout << "ERROR: Cannot write to input pin" << endl;
         return false;
     }
     else if( _mode == Pin::NODE_OUTPUT_PIN )
     {
+        cout << "LINKS " << _links.size() << endl;
         for( size_t k = 0; _links.size(); ++k )
         {
             Link* l = _links[k];
@@ -32,7 +34,9 @@ bool monadic::Pin::write(monadic::ObjectBlob *blob)
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 // Cannot read from output pin
@@ -51,7 +55,12 @@ std::vector< monadic::ObjectBlob * > monadic::Pin::read()
     }
     else if( _mode == Pin::NODE_OUTPUT_PIN )
     {
-        // Error management
+        cout << "ERROR: Cannot read from output pin" << endl;
     }
     return res;
+}
+
+void Pin::addLink(Link *l)
+{
+    _links.push_back( l );
 }

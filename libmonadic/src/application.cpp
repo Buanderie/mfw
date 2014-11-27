@@ -5,6 +5,7 @@
 // INTERNAL
 #include "application.hpp"
 #include "applicationworker.hpp"
+#include "system.hpp"
 
 using namespace std;
 
@@ -12,10 +13,8 @@ namespace monadic
 {
     void Application::init()
     {
-        //int ncore = boost::thread::hardware_concurrency();
-        //cout << "pitaing " << ncore << " cores !" << endl;
-        //_appThreadPool = boost::threadpool::prio_pool( boost::thread::hardware_concurrency() - 1 );
-        for( int k = 0; k < 8; ++k )
+        int numCores = System::getNumCores();
+        for( int k = 0; k < numCores; ++k )
         {
         	_workers.push_back( new ApplicationWorker(this) );
         }
@@ -61,7 +60,6 @@ namespace monadic
             if( nitr->second->getState() == Node::NODE_REQUESTING_ACTIVATION )
             {
                 nitr->second->setState( Node::NODE_ACTIVE );
-                cout << "pushing " << nitr->second->getGuid() << " to the stack" << endl;
                 _nodeQueue.push( nitr->second );
                 _nodeListCnd.signal();
             }
@@ -78,7 +76,6 @@ namespace monadic
         {
             if( _nodeQueue.size() > 0 )
             {
-                //cout << "queue size = " << dec << _nodeQueue.size() << endl;
                 Node* n = _nodeQueue.front();
                 _nodeQueue.pop();
                 ret = n;
@@ -90,7 +87,7 @@ namespace monadic
             }
             else
             {
-                ret->_nodeState = Node::NODE_BUSY;
+                ret->setState( Node::NODE_BUSY );
                 break;
             }
         }
@@ -101,11 +98,10 @@ namespace monadic
 
     void Application::releaseNode( Node* node )
     {
-        //cout << "lol imactive" << endl;
         _nodeListMtx.lock();
-        if( node->_nodeState == Node::NODE_BUSY )
+        if( node->getState() == Node::NODE_BUSY )
         {
-            node->_nodeState = Node::NODE_ACTIVE;
+            node->setState( Node::NODE_ACTIVE );
             _nodeQueue.push( node );
             _nodeListCnd.signal();
         }

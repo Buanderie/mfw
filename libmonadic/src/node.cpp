@@ -24,7 +24,6 @@ namespace monadic
 
     void Node::enable()
     {
-        cout << "Enabling " << _guid << endl;
         _nodeMtx.lock();
         _nodeState = Node::NODE_REQUESTING_ACTIVATION;
         _nodeMtx.unlock();
@@ -35,5 +34,12 @@ namespace monadic
         _nodeMtx.lock();
         _nodeState = Node::NODE_REQUESTING_DEACTIVATION;
         _nodeMtx.unlock();
+    }
+
+    Pin *Node::addPin(const std::string &pinLabel, Pin::PinMode mode)
+    {
+        Pin* p = new Pin( pinLabel, mode );
+        _pins.push_back(p);
+        return p;
     }
 }

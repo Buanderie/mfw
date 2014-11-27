@@ -84,6 +84,8 @@ namespace monadic
         virtual void tick( double dTime )=0;
         unsigned int getTickCount(){ return _tickCount; }
 
+        monadic::Pin* addPin( const std::string& pinLabel, monadic::Pin::PinMode mode );
+
     private:
         monadic::Application*   _parentApp;
         std::string             _nodeName;

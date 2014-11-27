@@ -14,18 +14,17 @@
 using namespace std;
 
 monadic::Link* lnk;
+monadic::Pin* p1;
+monadic::Pin* p2;
 
 void producer()
 {
   int i = 0;
   for (;;)
   {
-      //sleep(1);
-      //std::cout << "producer" << std::endl;
-      monadic::Image img;
-      img.create( 1 + rand()%3480, 1 + rand()%2160, 8, 3 );
-      monadic::ObjectBlob* blob = img.serialize();
-      lnk->write(blob);
+      monadic::Number n(12345.0);
+      monadic::ObjectBlob* blob = n.serialize();
+      p1->write(blob);
       delete blob;
   }
 }
@@ -37,14 +36,14 @@ void consumer()
     sleep(1);
     Timer t;
     t.start();
-    //std::cout << "consumer" << std::endl;
-    monadic::Image n2;
-    monadic::ObjectBlob* blob2 = lnk->read();
-    if( blob2 != 0 )
+    vector< monadic::ObjectBlob* > blob2 = p2->read();
+    if( blob2.size() != 0 )
     {
-    n2.deserialize( blob2 );
-    //cout <<  << endl;
-    delete blob2;
+        monadic::Number n2;
+        n2.deserialize( blob2[0] );
+        for( int i = 0; i < blob2.size(); ++i )
+            delete blob2[0];
+        cout << "Number received : " << n2.getValue() << endl;
     }
     t.stop();
     double tt = t.getElapsedTimeInSec();
@@ -56,45 +55,10 @@ int main() {
 
 
     srand(time(NULL));
-    /*
-    for( int i = 0; i < 10000000; ++i )
-    {
-        cout << "PUSH " << i << endl;
-        size_t N = 100;
-        size_t MAXLEN = 1600*1200*3*10;
-        monadic::BipBuffer b(MAXLEN, monadic::BipBuffer::BIPBUFFER_OVERWRITE );
-        for( int k = 1; k <= N; ++k )
-        {
-            size_t blobSize = 1600*1200*3;
-            unsigned char* data = new unsigned char[blobSize];
-            b.push( data, blobSize );
-            delete data;
-            cout << "blobSize=" << blobSize << " - b.size()=" << b.size() << endl;
-        }
 
-        cout << "POP " << i << endl;
-        size_t totalSize = 0;
-        while( 1 )
-        {
-            if( b.size() <= 0 )
-                break;
-
-            size_t blobSize = b.peekSize();
-            totalSize += blobSize;
-            cout << "b.size=" << b.size() << " - peekSize=" << blobSize << endl;
-            unsigned char* data = new unsigned char[blobSize];
-            if( !b.pop(data) )
-                cout << "pop xcouille" << endl;
-            delete[] data;
-        }
-        cout << "total=" << totalSize << endl;
-    }
-    */
-
-    lnk = new monadic::Link( 0, 0, 1000457280, monadic::Link::NODE_LINK_NONBLOCKING );
-
-
-
+    p1 = new monadic::Pin( "output", monadic::Pin::NODE_OUTPUT_PIN );
+    p2 = new monadic::Pin( "input", monadic::Pin::NODE_INPUT_PIN );
+    lnk = new monadic::Link( p1, p2, 1000457280, monadic::Link::NODE_LINK_NONBLOCKING );
     boost::thread t(producer);
     boost::thread t2(consumer);
 
@@ -102,8 +66,6 @@ int main() {
     {
         sleep(1);
         cout << "occupation: " << lnk->occupation() << endl;
-
-
     }
 
     return 0;
