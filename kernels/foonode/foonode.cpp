@@ -7,6 +7,8 @@
 #include <cstring>
 
 #include <objects/base/number.hpp>
+#include <objects/image/image.hpp>
+
 
 using namespace std;
 using namespace monadic;
@@ -40,19 +42,20 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
 
     void FooNode::tick( double dt )
     {
-        monadic::Number n( 1234.0 );
         if( _pins.size() > 0 )
         {
-        for( size_t k = 0; k < _pins.size(); ++k )
-        {
-            ObjectBlob* b = n.serialize();
-            _pins[k]->write( b );
-            cout << getGuid() << " sent number " << n.getValue() << endl;
-            delete b;
-        }
+            monadic::Image n;
+            n.create( 800, 600, 8, 3 );
+            for( size_t k = 0; k < _pins.size(); ++k )
+            {
+                ObjectBlob* b = n.serialize();
+                _pins[k]->write( b );
+                //cout << getGuid() << " sent number " << n.getValue() << endl;
+                delete b;
+            }
         }
         else
         {
-            cout << getGuid() << " - NOPE" << endl;
+            //cout << getGuid() << " - NOPE" << endl;
         }
     }

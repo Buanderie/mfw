@@ -19,7 +19,10 @@ namespace monadic
 	friend class CondVar;
 	public:
 		Mutex(){
-			pthread_mutex_init(&_mtx, NULL);
+
+            //pthread_mutexattr_t attr;
+            //pthread_mutexattr_settype (&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+            pthread_mutex_init(&_mtx, NULL);
 		}
 
 		~Mutex(){

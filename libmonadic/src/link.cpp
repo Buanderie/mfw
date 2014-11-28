@@ -42,9 +42,9 @@ monadic::Link::~Link()
 void monadic::Link::write(monadic::ObjectBlob *blob)
 {
     _linkMtx.lock();
-
+    //cout << "before pushing" << endl;
     bool ret = _buffer->push( blob->data(), blob->data_size() );
-
+    //cout << "ret=" << ret << endl;
     if( _mode == Link::NODE_LINK_BLOCKING )
     {
         while( ret == false )

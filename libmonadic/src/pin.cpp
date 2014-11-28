@@ -25,8 +25,8 @@ bool monadic::Pin::write(monadic::ObjectBlob *blob)
     }
     else if( _mode == Pin::NODE_OUTPUT_PIN )
     {
-        cout << "LINKS " << _links.size() << endl;
-        for( size_t k = 0; _links.size(); ++k )
+        //cout << "LINKS " << _links.size() << endl;
+        for( size_t k = 0; k < _links.size(); ++k )
         {
             Link* l = _links[k];
             l->write( blob );

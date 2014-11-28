@@ -108,12 +108,26 @@ int main ( int argc, char** argv )
     app.addNode( "VideoInput" );
     app.addNode( "VideoInput" );
     */
-    Node* n1 = app.addNode( "Foo" );
-    Node* n2 = app.addNode( "Bar" );
-    Pin* p1  = n1->addPin( "bite", Pin::NODE_OUTPUT_PIN );
-    Pin* p2 = n2->addPin( "cul", Pin::NODE_INPUT_PIN );
-    app.addLink( p1, p2, 2048*10, Link::NODE_LINK_NONBLOCKING );
 
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+
+    Node* n1 = app.addNode( "Foo" );
+    Node* n5 = app.addNode( "Foo" );
+    Node* n2 = app.addNode( "Bar" );
+    Node* n3 = app.addNode( "Bar" );
+    Node* n4 = app.addNode( "Bar" );
+    Pin* p1  = n1->addPin( "bite", Pin::NODE_OUTPUT_PIN );
+    Pin* p5  = n5->addPin( "bite", Pin::NODE_OUTPUT_PIN );
+    Pin* p2 = n2->addPin( "cul", Pin::NODE_INPUT_PIN );
+    Pin* p3 = n3->addPin( "cul", Pin::NODE_INPUT_PIN );
+    Pin* p4 = n4->addPin( "cul", Pin::NODE_INPUT_PIN );
+    app.addLink( p1, p2, 100000000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p1, p3, 100000000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p5, p4, 100000000, Link::NODE_LINK_BLOCKING );
     /*
     app.addNode( "Foo" );
     app.addNode( "Foo" );
@@ -135,7 +149,7 @@ int main ( int argc, char** argv )
 
     app.enableAllNodes();
     //app.start();
-	
+    app.start();
     while(1)
     {
         cout << "t=" << app.getElapsedTime() << endl;
@@ -157,7 +171,7 @@ int main ( int argc, char** argv )
         usleep(1000000);
         #endif
 
-        app.start();
+
     }
 
     cout << "CHIPS" << endl;

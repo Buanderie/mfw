@@ -33,7 +33,7 @@ void consumer()
 {
   for (;;)
   {
-    sleep(1);
+    //sleep(1);
     Timer t;
     t.start();
     vector< monadic::ObjectBlob* > blob2 = p2->read();
