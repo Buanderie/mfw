@@ -9,12 +9,13 @@
 #include "objectblob.hpp"
 #include "bipbuffer.hpp"
 #include "identifiable.hpp"
+#include "jsonable.hpp"
 
 namespace monadic
 {
     class Pin;
     class Node;
-    class Link : public monadic::Identifiable
+    class Link : public monadic::Identifiable, monadic::JSONable
     {
     public:
         // Typedefs
@@ -31,6 +32,7 @@ namespace monadic
         monadic::ObjectBlob* read();
         std::size_t occupation();
 
+        virtual picojson::object toJSON();
 
     private:
         monadic::Pin*       _p1;

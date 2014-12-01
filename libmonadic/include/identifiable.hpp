@@ -16,6 +16,11 @@ namespace monadic
 				return _guid;
 			}
 
+            void setGuid( const monadic::Guid& guid )
+            {
+                _guid = guid;
+            }
+
 			void resetGuid()
 			{
 				monadic::GuidGenerator gen;

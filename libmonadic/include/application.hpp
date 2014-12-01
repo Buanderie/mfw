@@ -42,7 +42,7 @@ namespace monadic
             void stop();
 
             // Public Node management API
-            Node* addNode( const std::string& nodeType );
+            Node* addNode(const std::string& nodeType , const monadic::Guid guid=std::string("00000000-0000-0000-0000-000000000000") );
             std::vector< monadic::Guid > getNodeIds();
             std::vector< monadic::Node* > getNodes();
             Node* getNode( const monadic::Guid& guid );
@@ -50,7 +50,11 @@ namespace monadic
 	    
             // Public Link management API
             Link* addLink( monadic::Pin* pin1, monadic::Pin* pin2, std::size_t bandwidth, monadic::Link::LinkMode mode );
-            monadic::Guid addLink( const monadic::Guid& n1, const monadic::Guid& n2, const monadic::Guid& pin1, const monadic::Guid& pin2, size_t bandwidth, Link::LinkMode mode );
+            monadic::Guid addLink( const monadic::Guid& n1, const monadic::Guid& n2, const std::string& pin1, const std::string& pin2, size_t bandwidth, Link::LinkMode mode );
+
+            // Public Application management API
+            bool save( const std::string& filePath );
+            bool load( const std::string& filePath );
 
             double getElapsedTime();
 

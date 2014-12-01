@@ -1,6 +1,10 @@
 
 // STL
 #include <iostream>
+#include <fstream>
+
+// PICOJSON
+#include "picojson.hpp"
 
 // INTERNAL
 #include "application.hpp"
@@ -129,6 +133,135 @@ namespace monadic
         return l;
     }
 
+    Guid Application::addLink(const Guid &n1, const Guid &n2, const string &pin1, const string &pin2, size_t bandwidth, Link::LinkMode mode)
+    {
+        Node* node1 = 0;
+        Node* node2 = 0;
+
+        for( map< Guid, Node* >::iterator i = _nodes.begin(); i != _nodes.end(); ++i )
+        {
+            if( i->second->getGuid() == n1 )
+            {
+                cout << "FOUND: " << n1 << " - " << i->second << endl;
+                node1 = i->second;
+            }
+            else if( i->second->getGuid() == n2 )
+            {
+                cout << "FOUND: " << n1 << " - " << i->second << endl;
+                node2 = i->second;
+            }
+        }
+
+        cout << "node1=" << node1 << " - node2=" << node2 << endl;
+        cout << "n1=" << n1 << " - n2=" << n2 << endl;
+        Pin* p1 = node1->findPinFromLabel( pin1 );
+        Pin* p2 = node2->findPinFromLabel( pin2 );
+        Link* l = addLink( p1, p2, bandwidth, mode );
+        return l->getGuid();
+
+    }
+
+    bool Application::save(const string &filePath)
+    {
+        picojson::object root;
+
+        // Save nodes
+        picojson::array nodeArray;
+        map< monadic::Guid, monadic::Node* >::iterator nitr;
+        for( nitr = _nodes.begin(); nitr != _nodes.end(); ++nitr )
+        {
+            picojson::object nodeObj = nitr->second->toJSON();
+            nodeArray.push_back( picojson::value(nodeObj) );
+        }
+        root["nodes"] = picojson::value( nodeArray );
+
+        // Save links
+        picojson::array linkArray;
+        vector< monadic::Link* >::iterator litr;
+        for( litr = _links.begin(); litr != _links.end(); ++litr )
+        {
+            picojson::object linkObj = (*litr)->toJSON();
+            linkArray.push_back( picojson::value(linkObj) );
+        }
+        root["links"] = picojson::value( linkArray );
+
+        string str = picojson::value(root).serialize();
+        printf("serialized content = %s\r\n" ,  str.c_str());
+
+        ofstream ofs( filePath.c_str() );
+        ofs << str;
+        ofs.close();
+
+        return true;
+    }
+
+    bool Application::load(const string &filePath)
+    {
+        _nodes.clear();
+        _links.clear();
+
+        std::string jsonSource;
+
+        // Load file
+        ifstream ifs( filePath.c_str() );
+        while(1)
+        {
+            if( ifs.eof() )
+                break;
+            string dump;
+            getline( ifs, dump );
+            jsonSource += dump;
+        }
+        cout << "source=" << jsonSource << endl;
+        const char* json = jsonSource.c_str();
+        picojson::value v;
+        string err = picojson::parse(v, json, json + strlen(json));
+
+        // obtain a const reference to the map, and print the contents
+        picojson::object& root = v.get<picojson::object>();
+
+        const picojson::array& nodeArray = root["nodes"].get<picojson::array>();
+        const picojson::array& linkArray = root["links"].get<picojson::array>();
+
+        // parse nodes
+        for( int k = 0; k < nodeArray.size(); ++k )
+        {
+            // retrieve node object
+            picojson::object jn = nodeArray[k].get<picojson::object>();
+            std::string nguid = jn["guid"].get<string>();
+            std::string nkernel = jn["kernel"].get<string>();
+            cout << nguid << " - " << nkernel << endl;
+            this->addNode( nkernel, monadic::Guid(nguid) );
+        }
+
+        cout << "### NODES : " << _nodes.size() << " ###" << endl;
+        for( map< Guid, Node* >::iterator i = _nodes.begin(); i != _nodes.end(); ++i )
+        {
+            cout << i->second->getGuid() << " - " << i->second << endl;
+        }
+
+        // parse links
+        for( int k = 0; k < linkArray.size(); ++k )
+        {
+            // retrieve node object
+            picojson::object jl = linkArray[k].get<picojson::object>();
+            Link::LinkMode lmode = (Link::LinkMode)(jl["mode"].get<double>());
+            size_t lbandwidth = (unsigned int)(jl["bandwidth"].get<double>());
+            monadic::Guid startNode = monadic::Guid( jl["startnode"].get<string>() );
+            monadic::Guid endNode = monadic::Guid( jl["endnode"].get<string>() );
+            string startPin = jl["startpin"].get<string>();
+            string endPin = jl["endpin"].get<string>();
+
+            cout << "startPin=" << startPin << " - endPin=" << endPin << endl;
+            cout << "startNode=" << startNode << " - endNode=" << endNode << endl;
+
+            this->addLink( startNode, endNode, startPin, endPin, lbandwidth, lmode );
+        }
+
+
+        return true;
+    }
+
     Node *Application::getNode(const Guid &guid)
     {
         map< monadic::Guid, Node* >::iterator nitr;
@@ -149,10 +282,19 @@ namespace monadic
 
 }
 
-monadic::Node* monadic::Application::addNode( const std::string& nodeType )
+monadic::Node* monadic::Application::addNode( const std::string& nodeType, const monadic::Guid guid )
 {
     Node* n = _kernelManager->create( nodeType );
-    n->resetGuid();
+
+    if( guid == monadic::Guid("00000000-0000-0000-0000-000000000000") )
+    {
+        n->resetGuid();
+    }
+    else
+    {
+        n->setGuid(guid);
+    }
+
     _nodes.insert( make_pair( n->getGuid(), n ) );
     return n;
 }

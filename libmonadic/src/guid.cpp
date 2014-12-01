@@ -145,7 +145,16 @@ monadic::Guid &monadic::Guid::operator=(const Guid &other)
 // overload equality operator
 bool monadic::Guid::operator==(const monadic::Guid &other) const
 {
-  return _bytes == other._bytes;
+    bool ret = true;
+    for( size_t k = 0; k < _bytes.size(); ++k )
+    {
+        if( _bytes[k] != other._bytes[k] )
+        {
+            ret = false;
+            break;
+        }
+    }
+    return ret;
 }
 
 // overload inequality operator
@@ -166,6 +175,13 @@ bool monadic::Guid::operator <(const monadic::Guid &other) const
         }
     }
     return ret;
+}
+
+string monadic::Guid::toString()
+{
+    stringstream sstr;
+    sstr << *this;
+    return sstr.str();
 }
 
 // This is the linux friendly implementation, but it could work on other

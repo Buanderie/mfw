@@ -16,6 +16,7 @@
 
 // INTERNAL
 #include "identifiable.hpp"
+#include "jsonable.hpp"
 #include "thread.hpp"
 #include "pin.hpp"
 
@@ -23,7 +24,7 @@
 namespace monadic
 {
     class Application;
-    class Node : public Identifiable
+    class Node : public Identifiable, JSONable
     {
     
     friend class KernelManager;
@@ -85,6 +86,9 @@ namespace monadic
         unsigned int getTickCount(){ return _tickCount; }
 
         monadic::Pin* addPin( const std::string& pinLabel, monadic::Pin::PinMode mode );
+        monadic::Pin* findPinFromLabel( const std::string& pinLabel );
+
+        virtual picojson::object toJSON();
 
     private:
         monadic::Application*   _parentApp;

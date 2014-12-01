@@ -56,11 +56,13 @@ int main() {
 
     srand(time(NULL));
 
+    /*
     p1 = new monadic::Pin( "output", monadic::Pin::NODE_OUTPUT_PIN );
     p2 = new monadic::Pin( "input", monadic::Pin::NODE_INPUT_PIN );
     lnk = new monadic::Link( p1, p2, 1000457280, monadic::Link::NODE_LINK_NONBLOCKING );
     boost::thread t(producer);
     boost::thread t2(consumer);
+    */
 
     for(;;)
     {

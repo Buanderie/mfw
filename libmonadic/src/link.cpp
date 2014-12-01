@@ -1,7 +1,11 @@
 
+// STL
+#include <sstream>
+
 // INTERNAL
 #include "link.hpp"
 #include "pin.hpp"
+#include "node.hpp"
 
 using namespace std;
 using namespace monadic;
@@ -31,6 +35,7 @@ monadic::Link::Link(Pin *pin1, Pin *pin2, std::size_t bandwidth, monadic::Link::
     _buffer = new monadic::BipBuffer( _bandwidth, strategy );
     _p1->addLink( this );
     _p2->addLink( this );
+
 }
 
 monadic::Link::~Link()
@@ -107,5 +112,22 @@ size_t Link::occupation()
     _linkMtx.lock();
     ret = _buffer->size();
     _linkMtx.unlock();
+    return ret;
+}
+
+picojson::object Link::toJSON()
+{
+    picojson::object ret;
+
+    ret["guid"] = picojson::value( this->getGuid().toString() );
+    ret["mode"] = picojson::value( (float)(this->_mode) );
+    ret["bandwidth"] = picojson::value( (float)this->_bandwidth );
+
+    ret["startnode"] = picojson::value( this->_p1->getParent()->getGuid().toString() );
+    ret["endnode"] = picojson::value( this->_p2->getParent()->getGuid().toString() );
+
+    ret["startpin"] = picojson::value( this->_p1->getLabel() );
+    ret["endpin"] = picojson::value( this->_p2->getLabel() );
+
     return ret;
 }

@@ -21,6 +21,8 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
         std::cout << "Foo::CTOR" << std::endl;
         std::cout << "dlfk=" << _kernelName << endl;
         //monadic::Image* img = reinterpret_cast<monadic::Image*>( monadic::ObjectFactory::create("Image") );
+        this->addPin( "bite", Pin::NODE_OUTPUT_PIN );
+        cout << "KALBOP " << this->_pins.size() << endl;
     }
 
     FooNode::~FooNode()

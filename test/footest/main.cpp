@@ -125,9 +125,10 @@ int main ( int argc, char** argv )
     Pin* p2 = n2->addPin( "cul", Pin::NODE_INPUT_PIN );
     Pin* p3 = n3->addPin( "cul", Pin::NODE_INPUT_PIN );
     Pin* p4 = n4->addPin( "cul", Pin::NODE_INPUT_PIN );
-    app.addLink( p1, p2, 100000000, Link::NODE_LINK_BLOCKING );
-    app.addLink( p1, p3, 100000000, Link::NODE_LINK_BLOCKING );
-    app.addLink( p5, p4, 100000000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p1, p2, 1500000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p1, p3, 1500000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p5, p4, 1500000, Link::NODE_LINK_BLOCKING );
+
     /*
     app.addNode( "Foo" );
     app.addNode( "Foo" );
@@ -149,7 +150,16 @@ int main ( int argc, char** argv )
 
     app.enableAllNodes();
     //app.start();
+    //
+
+    //app.save("popo.app");
+    app.load("popo.app");
+    app.enableAllNodes();
+    //app.save("popo.app");
+
     app.start();
+    //return 0;
+
     while(1)
     {
         cout << "t=" << app.getElapsedTime() << endl;

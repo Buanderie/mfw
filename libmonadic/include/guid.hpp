@@ -65,6 +65,7 @@ public:
     bool operator!=(const Guid &other) const;
     bool operator<(const Guid &other) const;
 
+    std::string toString();
 private:
 
     // actual data

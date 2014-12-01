@@ -4,8 +4,8 @@
 
 using namespace monadic;
 
-monadic::Pin::Pin( const std::string& name, monadic::Pin::PinMode mode )
-    :_name(name), _mode(mode)
+monadic::Pin::Pin(Node *parentNode, const std::string& name, monadic::Pin::PinMode mode )
+    :_name(name), _mode(mode), _parent(parentNode)
 {
 
 }
@@ -58,6 +58,11 @@ std::vector< monadic::ObjectBlob * > monadic::Pin::read()
         cout << "ERROR: Cannot read from output pin" << endl;
     }
     return res;
+}
+
+Node *Pin::getParent()
+{
+    return _parent;
 }
 
 void Pin::addLink(Link *l)

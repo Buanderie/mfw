@@ -9,14 +9,13 @@
 #include <vector>
 
 // INTERNAL
-#include "identifiable.hpp"
 #include "link.hpp"
 #include "thread.hpp"
 #include "objectblob.hpp"
 
 namespace monadic
 {
-    class Pin : public Identifiable
+    class Pin
     {
 
         friend class Link;
@@ -29,16 +28,18 @@ namespace monadic
             NODE_OUTPUT_PIN
         } PinMode;
 
-        Pin(const std::string& name, monadic::Pin::PinMode mode);
+        Pin( monadic::Node* parentNode, const std::string& name, monadic::Pin::PinMode mode);
         virtual ~Pin();
 
         bool write( monadic::ObjectBlob* blob );
         std::vector< monadic::ObjectBlob* > read();
         std::string getLabel(){ return _name; }
+        monadic::Node* getParent();
 
     private:
         std::string                     _name;
         PinMode                         _mode;
+        monadic::Node*                  _parent;
         std::vector< monadic::Link* >   _links;
 
         void addLink( Link* l );

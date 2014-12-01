@@ -1,8 +1,11 @@
 
+// STL
+#include <sstream>
 
 // INTERNAL 
 #include "node.hpp"
 
+using namespace std;
 using namespace monadic;
 
 namespace monadic
@@ -38,8 +41,33 @@ namespace monadic
 
     Pin *Node::addPin(const std::string &pinLabel, Pin::PinMode mode)
     {
-        Pin* p = new Pin( pinLabel, mode );
+        Pin* p = new Pin( this, pinLabel, mode );
         _pins.push_back(p);
         return p;
+    }
+
+    Pin *Node::findPinFromLabel(const string &pinLabel)
+    {
+        cout << "this=" << this << " - " << _pins.size() << endl;
+        Pin* ret = 0;
+        for( size_t k = 0; k < _pins.size(); ++k )
+        {
+            if( _pins[k]->getLabel() == pinLabel )
+            {
+                ret = _pins[k];
+                break;
+            }
+        }
+        return ret;
+    }
+
+    picojson::object Node::toJSON()
+    {
+        picojson::object ret;
+        ret["kernel"] = picojson::value(this->getKernelName());
+        stringstream sstr;
+        sstr << getGuid();
+        ret["guid"] = picojson::value(sstr.str());
+        return ret;
     }
 }
