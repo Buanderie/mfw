@@ -109,25 +109,56 @@ int main ( int argc, char** argv )
     app.addNode( "VideoInput" );
     */
 
+    
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
-
-    Node* n1 = app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+		app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    app.addNode( "Foo" );
+    
+    Node* n1 = app.addNode( "Number" );
     Node* n5 = app.addNode( "Foo" );
-    Node* n2 = app.addNode( "Bar" );
-    Node* n3 = app.addNode( "Bar" );
-    Node* n4 = app.addNode( "Bar" );
-    Pin* p1  = n1->addPin( "bite", Pin::NODE_OUTPUT_PIN );
-    Pin* p5  = n5->addPin( "bite", Pin::NODE_OUTPUT_PIN );
-    Pin* p2 = n2->addPin( "cul", Pin::NODE_INPUT_PIN );
-    Pin* p3 = n3->addPin( "cul", Pin::NODE_INPUT_PIN );
-    Pin* p4 = n4->addPin( "cul", Pin::NODE_INPUT_PIN );
-    app.addLink( p1, p2, 1500000, Link::NODE_LINK_BLOCKING );
+    Node* n2 = app.addNode( "Number" );
+    Node* n3 = app.addNode( "Add" );
+    Node* n4 = app.addNode( "VideoInput" );
+    Node* n6 = app.addNode( "VideoDisplay" );
+
+    Pin* p1  = n1->findPinFromLabel("out");
+    Pin* p2  = n2->findPinFromLabel("out");
+    Pin* p3  = n3->findPinFromLabel("in1");
+    Pin* p4  = n3->findPinFromLabel("in2");
+    Pin* p5 = n4->findPinFromLabel("out");
+    Pin* p6 = n6->findPinFromLabel("in");
+
     app.addLink( p1, p3, 1500000, Link::NODE_LINK_BLOCKING );
-    app.addLink( p5, p4, 1500000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p2, p4, 1500000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p5, p6, 6500000, Link::NODE_LINK_BLOCKING );
 
     /*
     app.addNode( "Foo" );
@@ -153,8 +184,8 @@ int main ( int argc, char** argv )
     //
 
     //app.save("popo.app");
-    app.load("popo.app");
-    app.enableAllNodes();
+    //app.load("popo.app");
+    //app.enableAllNodes();
     //app.save("popo.app");
 
     app.start();

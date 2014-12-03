@@ -1,4 +1,5 @@
 // C
+#include <cstring>
 
 // STL
 #include <iostream>
@@ -58,8 +59,18 @@ int monadic::Image::create(unsigned int width, unsigned int height, unsigned int
     _height = height;
     _depth = depth;
     _channels = channels;
-    const unsigned int memsz = _width * _height * (_depth/8) * _channels;
+    const unsigned int memsz = _width * _height * _depth/8 * _channels;
     _rawBuffer = new unsigned char[ memsz ];
     return 0;
+}
+
+void Image::copyFrom(char *data, size_t size)
+{
+    memcpy( _rawBuffer, data, size );
+}
+
+char *Image::ptr()
+{
+    return (char*)_rawBuffer;
 }
 

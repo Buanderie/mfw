@@ -46,6 +46,13 @@ if( ${MONADIC_CURRENT_SYSTEM} STREQUAL "LINUX" )
         set( DEPS "${DEPS};uuid" )
 endif()
 
+# Look for OpenMP
+find_package(OpenMP)
+if( OpenMP_FOUND )
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
+
 # Set include directories
 include_directories( ${LIBMONADIC_SOURCE_DIR}/include )
 include_directories( ${LIBMONADIC_SOURCE_DIR}/objects )

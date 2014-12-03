@@ -16,7 +16,6 @@ class VideoInputNode : public monadic::Node
         void tick( double dt );
 
         private:
-        int _cpt;
-        std::ofstream pol;
+        void* _cap;
 };
 

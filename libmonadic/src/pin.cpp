@@ -1,4 +1,7 @@
 
+// OPENMP
+#include <omp.h>
+
 // INTERNAL
 #include "pin.hpp"
 
@@ -25,7 +28,7 @@ bool monadic::Pin::write(monadic::ObjectBlob *blob)
     }
     else if( _mode == Pin::NODE_OUTPUT_PIN )
     {
-        //cout << "LINKS " << _links.size() << endl;
+//#pragma omp parallel for
         for( size_t k = 0; k < _links.size(); ++k )
         {
             Link* l = _links[k];
@@ -45,6 +48,7 @@ std::vector< monadic::ObjectBlob * > monadic::Pin::read()
     std::vector< ObjectBlob* > res;
     if( _mode == Pin::NODE_INPUT_PIN )
     {
+//#pragma omp parallel for
         for( std::size_t k = 0; k < _links.size(); ++k )
         {
             Link* l = _links[k];

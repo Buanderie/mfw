@@ -5,15 +5,24 @@
 #include <iomanip>
 #include <cstdlib>
 #include <cstring>
-//#include <unistd.h>
+
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+#include "monadic.hpp"
+#include "objects/image/image.hpp"
 
 using namespace std;
+using namespace monadic;
 
 MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
 
     VideoInputNode::VideoInputNode()
     {
+        _cap = 0;
+        _kernelName = "VideoInput";
         std::cout << "VideoNode::CTOR" << std::endl;
+        this->addPin( "out", monadic::Pin::NODE_OUTPUT_PIN );
     }
 
     VideoInputNode::~VideoInputNode()
@@ -23,20 +32,44 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
 
     void VideoInputNode::setup()
     {
-        _cpt = 0;
-        pol.open("video.txt");
+        cv::VideoCapture* cap = new cv::VideoCapture("/home/said/videos/outputVideo.avi");
+        //cv::VideoCapture* cap = new cv::VideoCapture(0);
+        _cap = (void*)cap;
     }
 
     void VideoInputNode::tick( double dt )
     {
-        std::cout << "VideoNode: " << dt << std::endl;
-	    _cpt++;
-        for( int i = 0; i < 10000; ++i )
-		{
-            double k = pow( 0.8, exp( rand() / rand() ) * log( 2.0 ) * exp( 10.0 ) );
-		}
-        //if( _cpt == 5000 )
-        //    disable();
-        //sleep(1);
-        pol << _cpt << " - " << setprecision(12) << dt << endl;
+    		Timer t;
+        t.start();
+        cv::Mat frame;
+        cv::VideoCapture* cap = (cv::VideoCapture*)_cap;
+        if( cap->grab() )
+        {
+            cap->retrieve(frame);
+            //cv::resize( frame, frame, cv::Size( frame.cols * 2, frame.rows * 2 ) );
+            cv::cvtColor( frame, frame, CV_BGR2RGB );
+            cout << "shit retreived" << endl;
+            monadic::Image img;
+            img.create( frame.cols, frame.rows, 8, frame.channels() );
+
+            size_t bufferSize = frame.cols * frame.rows * frame.channels();
+            img.copyFrom( (char*)frame.data, bufferSize );
+
+            ObjectBlob* b = img.serialize();
+            Pin* outPin = this->findPinFromLabel("out");
+            outPin->write( b );
+            /*
+            cv::imshow("pol.png", frame);
+            cv::waitKey(5);
+            */
+            delete b;
+
+        }
+        else
+        {
+            cout << "nononono" << endl;
+        }
+        t.stop();
+        cout << "PLAYER - t=" << t.getElapsedTimeInSec() << " - fps=" << 1.0 / t.getElapsedTimeInSec() << endl;
+        cout << "###### TICK TOCK ######" << endl;
     }
