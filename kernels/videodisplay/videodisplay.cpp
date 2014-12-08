@@ -68,6 +68,8 @@ MONADIC_NODE_EXPORT( VideoDisplayNode, "VideoDisplay" )
                 // Quit the program
                 return;
             }
+            
+            cout << "event.type=" << (int)(event.type) << endl;
         }
 
         Pin* p = this->findPinFromLabel("in");

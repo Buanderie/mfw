@@ -158,7 +158,7 @@ int main ( int argc, char** argv )
 
     app.addLink( p1, p3, 1500000, Link::NODE_LINK_BLOCKING );
     app.addLink( p2, p4, 1500000, Link::NODE_LINK_BLOCKING );
-    app.addLink( p5, p6, 6500000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p5, p6, 6500000, Link::NODE_LINK_NONBLOCKING );
 
     /*
     app.addNode( "Foo" );

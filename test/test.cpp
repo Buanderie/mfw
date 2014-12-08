@@ -2,17 +2,26 @@
 
 #include <gtest/gtest.h>
 
-TEST(cpp_sorter_test, null_term_str_sort)
-{
-	EXPECT_EQ(7, 7);
-}
+// FUGLY :)
+#include "../../libmonadic/include/monadic.hpp"
+#include "../../libmonadic/include/object.hpp"
+#include "../../libmonadic/include/objects/image/image.hpp"
 
-TEST(cpp_sorter_test, char_arr_sort)
-{
-EXPECT_EQ(7, 7);
-}
+using namespace monadic;
 
-TEST(cpp_sorter_test, int_arr_sort)
+TEST(object_serialization, image)
 {
-EXPECT_EQ(7, 7);
+    Image* img1 = new Image();
+    img1->create( 1600, 1200, 8, 3 );
+    img1->ptr()[47] = 7;
+    unsigned int N = 100;
+    for( int k = 0; k < N; ++k )
+    {
+        Image* img2 = new Image();
+        ObjectBlob* blob = img1->serialize();
+        img2->deserialize(blob);
+        EXPECT_EQ( img2->ptr()[47], 7 );
+        delete img2;
+        delete blob;
+    }
 }

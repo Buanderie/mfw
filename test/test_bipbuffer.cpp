@@ -18,6 +18,7 @@ TEST(BipBuffer, Capacity)
 }
 */
 
+/*
 TEST(cpp_sorter88_test, char_arr_sort)
 {
 EXPECT_EQ(7, 7);
@@ -27,4 +28,5 @@ TEST(cpp_sorter88_test, int_arr_sort)
 {
 EXPECT_EQ(7, 7);
 }
+*/
 
