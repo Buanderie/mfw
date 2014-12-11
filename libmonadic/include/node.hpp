@@ -32,7 +32,6 @@ namespace monadic
     friend class ApplicationWorker;
 
     protected:
-        std::string     _kernelName;
 
         // Pins
         std::vector< monadic::Pin * > _pins;
@@ -58,7 +57,7 @@ namespace monadic
         void stop();
         void run();
         
-        std::string getKernelName(){ return _kernelName; }
+        virtual std::string getKernelName()=0;
 
         unsigned int getPriority(){ return _priority; }
         void setPriority( unsigned int priority ){ _priority = priority; }

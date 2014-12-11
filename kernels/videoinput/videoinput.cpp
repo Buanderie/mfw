@@ -20,7 +20,6 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
     VideoInputNode::VideoInputNode()
     {
         _cap = 0;
-        _kernelName = "VideoInput";
         std::cout << "VideoNode::CTOR" << std::endl;
         this->addPin( "out", monadic::Pin::NODE_OUTPUT_PIN );
     }
@@ -28,6 +27,11 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
     VideoInputNode::~VideoInputNode()
     {
         std::cout << "VideoNode::DTOR" << std::endl;
+    }
+
+    std::string VideoInputNode::getKernelName()
+    {
+        return "VideoInput";
     }
 
     void VideoInputNode::setup()
@@ -56,7 +60,7 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
             img.copyFrom( (char*)frame.data, bufferSize );
 
             ObjectBlob* b = img.serialize();
-            Pin* outPin = this->findPinFromLabel("out");
+            Pin* outPin = findPinFromLabel("out");
             outPin->write( b );
             /*
             cv::imshow("pol.png", frame);

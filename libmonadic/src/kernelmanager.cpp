@@ -101,13 +101,13 @@ namespace monadic
         // THIS COULD CRASH IF KERNEL DOESN'T EXIST
         Kernel ent = _kernelRegistry[ kernelName ];
         Node* nNode = ent.create();
-        nNode->_kernelName = kernelName;
+        //nNode->_kernelName = kernelName;
         return nNode;
     }
     
     int KernelManager::destroy( Node* node )
     {
-        std::string nodeName = node->_kernelName;
+        std::string nodeName = node->getKernelName();
         Kernel ent = _kernelRegistry[ nodeName ];
         ent.destroy( node );
         return 0;
