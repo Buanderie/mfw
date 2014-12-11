@@ -10,6 +10,7 @@ class NumberNode : public monadic::Node
 
         void setup();
         void tick( double dt );
+        virtual std::string getKernelName();
 
         private:
 

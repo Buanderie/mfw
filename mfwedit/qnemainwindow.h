@@ -23,37 +23,45 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-#ifndef QNODESEDITOR_H
-#define QNODESEDITOR_H
+#ifndef QNEMAINWINDOW_H
+#define QNEMAINWINDOW_H
 
-#include <QObject>
+// Qt
+#include <QMainWindow>
+#include "qneblock.h"
+#include "qneconnection.h"
 
-class QGraphicsScene;
-class QNEConnection;
-class QGraphicsItem;
-class QPointF;
-class QNEBlock;
+// MFW
+#include <monadic.hpp>
 
-class QNodesEditor : public QObject
+namespace Ui {
+	class QNEMainWindow;
+}
+
+class QNodesEditor;
+
+class QNEMainWindow : public QMainWindow
 {
 	Q_OBJECT
+
 public:
-	explicit QNodesEditor(QObject *parent = 0);
+	explicit QNEMainWindow(QWidget *parent = 0);
+    virtual ~QNEMainWindow();
+    monadic::Application* getApp(){ return _app; }
 
-	void install(QGraphicsScene *scene);
-
-	bool eventFilter(QObject *, QEvent *);
-
-	void save(QDataStream &ds);
-	void load(QDataStream &ds);
-
-private:
-	QGraphicsItem *itemAt(const QPointF&);
+private slots:
+	void saveFile();
+	void loadFile();
+	void addBlock();
 
 private:
-	QGraphicsScene *scene;
-	QNEConnection *conn;
-	// QNEBlock *selBlock;
+	Ui::QNEMainWindow *ui;
+	QNodesEditor *nodesEditor;
+    monadic::Application* _app;
+
+    std::vector< QNEBlock* >        _blocks;
+    std::vector< QNEConnection* >   _connections;
+    std::vector< QNEPort* >         _ports;
 };
 
-#endif // QNODESEDITOR_H
+#endif // QNEMAINWINDOW_H

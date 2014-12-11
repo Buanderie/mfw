@@ -17,9 +17,7 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
 
     FooNode::FooNode()
     {
-        _kernelName = "Foo";
         std::cout << "Foo::CTOR" << std::endl;
-        std::cout << "dlfk=" << _kernelName << endl;
         //monadic::Image* img = reinterpret_cast<monadic::Image*>( monadic::ObjectFactory::create("Image") );
         this->addPin( "bite", Pin::NODE_OUTPUT_PIN );
         cout << "KALBOP " << this->_pins.size() << endl;
@@ -60,4 +58,9 @@ MONADIC_NODE_EXPORT( FooNode, "Foo" )
         {
             //cout << getGuid() << " - NOPE" << endl;
         }
+    }
+
+    string FooNode::getKernelName()
+    {
+        return "Foo";
     }

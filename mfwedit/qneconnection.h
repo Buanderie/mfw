@@ -26,6 +26,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #ifndef QNECONNECTION_H
 #define QNECONNECTION_H
 
+#include <monadic.hpp>
+
 #include <QGraphicsPathItem>
 
 class QNEPort;
@@ -52,11 +54,16 @@ public:
 
 	int type() const { return Type; }
 
+    void setLink( monadic::Link* link ){ _link = link; }
+    monadic::Link* getLink(){ return _link; }
+
 private:
 	QPointF pos1;
 	QPointF pos2;
 	QNEPort *m_port1;
 	QNEPort *m_port2;
+
+    monadic::Link* _link;
 };
 
 #endif // QNECONNECTION_H

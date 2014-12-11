@@ -12,6 +12,7 @@ class AddNode : public monadic::Node
 
         void setup();
         void tick( double dt );
+        virtual std::string getKernelName();
 
         private:
         	monadic::Number n1;

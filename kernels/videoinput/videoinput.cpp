@@ -43,37 +43,41 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
 
     void VideoInputNode::tick( double dt )
     {
-    		Timer t;
+        Timer t;
         t.start();
         cv::Mat frame;
         cv::VideoCapture* cap = (cv::VideoCapture*)_cap;
-        if( cap->grab() )
+        Pin* outPin = findPinFromLabel("out");
+        if( outPin->isConnected() )
         {
-            cap->retrieve(frame);
-            //cv::resize( frame, frame, cv::Size( frame.cols * 2, frame.rows * 2 ) );
-            cv::cvtColor( frame, frame, CV_BGR2RGB );
-            cout << "shit retreived" << endl;
-            monadic::Image img;
-            img.create( frame.cols, frame.rows, 8, frame.channels() );
+            if( cap->grab() )
+            {
+                cap->retrieve(frame);
+                //cv::resize( frame, frame, cv::Size( frame.cols * 2, frame.rows * 2 ) );
+                cv::cvtColor( frame, frame, CV_BGR2RGB );
+                //cout << "shit retreived" << endl;
+                monadic::Image img;
+                img.create( frame.cols, frame.rows, 8, frame.channels() );
 
-            size_t bufferSize = frame.cols * frame.rows * frame.channels();
-            img.copyFrom( (char*)frame.data, bufferSize );
+                size_t bufferSize = frame.cols * frame.rows * frame.channels();
+                img.copyFrom( (char*)frame.data, bufferSize );
 
-            ObjectBlob* b = img.serialize();
-            Pin* outPin = findPinFromLabel("out");
-            outPin->write( b );
-            /*
+                ObjectBlob* b = img.serialize();
+
+                outPin->write( b );
+                /*
             cv::imshow("pol.png", frame);
             cv::waitKey(5);
             */
-            delete b;
+                delete b;
 
-        }
-        else
-        {
-            cout << "nononono" << endl;
+            }
+            else
+            {
+                cout << "nononono" << endl;
+            }
         }
         t.stop();
-        cout << "PLAYER - t=" << t.getElapsedTimeInSec() << " - fps=" << 1.0 / t.getElapsedTimeInSec() << endl;
-        cout << "###### TICK TOCK ######" << endl;
+        //cout << "PLAYER - t=" << t.getElapsedTimeInSec() << " - fps=" << 1.0 / t.getElapsedTimeInSec() << endl;
+        //cout << "###### TICK TOCK ######" << endl;
     }

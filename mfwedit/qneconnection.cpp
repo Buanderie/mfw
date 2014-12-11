@@ -46,6 +46,9 @@ QNEConnection::~QNEConnection()
 		m_port1->connections().remove(m_port1->connections().indexOf(this));
 	if (m_port2)
 		m_port2->connections().remove(m_port2->connections().indexOf(this));
+
+    cout << "pol pol pol" << endl;
+    delete _link;
 }
 
 void QNEConnection::setPos1(const QPointF &p)

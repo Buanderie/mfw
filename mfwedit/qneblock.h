@@ -23,33 +23,48 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-#ifndef QNEMAINWINDOW_H
-#define QNEMAINWINDOW_H
+#ifndef QNEBLOCK_H
+#define QNEBLOCK_H
 
-#include <QMainWindow>
+#include <monadic.hpp>
 
-namespace Ui {
-	class QNEMainWindow;
-}
+#include <QGraphicsPathItem>
 
-class QNodesEditor;
+class QNEPort;
 
-class QNEMainWindow : public QMainWindow
+class QNEBlock : public QGraphicsPathItem
 {
-	Q_OBJECT
-
 public:
-	explicit QNEMainWindow(QWidget *parent = 0);
-	~QNEMainWindow();
+	enum { Type = QGraphicsItem::UserType + 3 };
 
-private slots:
-	void saveFile();
-	void loadFile();
-	void addBlock();
+	QNEBlock(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+
+	QNEPort* addPort(const QString &name, bool isOutput, int flags = 0, int ptr = 0);
+    QNEPort *addInputPort(const QString &name);
+    QNEPort *addOutputPort(const QString &name);
+	void addInputPorts(const QStringList &names);
+	void addOutputPorts(const QStringList &names);
+	void save(QDataStream&);
+	void load(QDataStream&, QMap<quint64, QNEPort*> &portMap);
+	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+	QNEBlock* clone();
+	QVector<QNEPort*> ports();
+
+	int type() const { return Type; }
+
+    void setNode( monadic::Node* n ){ _node = n; }
+    monadic::Node* getNode(){ return _node; }
+
+protected:
+	QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
-	Ui::QNEMainWindow *ui;
-	QNodesEditor *nodesEditor;
+	int horzMargin;
+	int vertMargin;
+	int width;
+	int height;
+
+    monadic::Node* _node;
 };
 
-#endif // QNEMAINWINDOW_H
+#endif // QNEBLOCK_H

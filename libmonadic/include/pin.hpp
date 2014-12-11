@@ -35,14 +35,18 @@ namespace monadic
         std::vector< monadic::ObjectBlob* > read();
         std::string getLabel(){ return _name; }
         monadic::Node* getParent();
+        monadic::Pin::PinMode getMode();
+        bool isConnected();
 
     private:
         std::string                     _name;
         PinMode                         _mode;
         monadic::Node*                  _parent;
         std::vector< monadic::Link* >   _links;
+        monadic::Mutex                  _mtx;
 
         void addLink( Link* l );
+        void removeLink( monadic::Link* link );
 
     protected:
 

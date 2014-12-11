@@ -23,41 +23,63 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-#ifndef QNEBLOCK_H
-#define QNEBLOCK_H
+#ifndef QNEPORT_H
+#define QNEPORT_H
+
+#include <monadic.hpp>
 
 #include <QGraphicsPathItem>
 
-class QNEPort;
+class QNEBlock;
+class QNEConnection;
 
-class QNEBlock : public QGraphicsPathItem
+class QNEPort : public QGraphicsPathItem
 {
 public:
-	enum { Type = QGraphicsItem::UserType + 3 };
+	enum { Type = QGraphicsItem::UserType + 1 };
+	enum { NamePort = 1, TypePort = 2 };
 
-	QNEBlock(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+	QNEPort(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
+	~QNEPort();
 
-	QNEPort* addPort(const QString &name, bool isOutput, int flags = 0, int ptr = 0);
-	void addInputPort(const QString &name);
-	void addOutputPort(const QString &name);
-	void addInputPorts(const QStringList &names);
-	void addOutputPorts(const QStringList &names);
-	void save(QDataStream&);
-	void load(QDataStream&, QMap<quint64, QNEPort*> &portMap);
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	QNEBlock* clone();
-	QVector<QNEPort*> ports();
+	void setNEBlock(QNEBlock*);
+	void setName(const QString &n);
+	void setIsOutput(bool o);
+	int radius();
+	bool isOutput();
+	QVector<QNEConnection*>& connections();
+	void setPortFlags(int);
+
+	const QString& portName() const { return name; }
+	int portFlags() const { return m_portFlags; }
 
 	int type() const { return Type; }
+
+	QNEBlock* block() const;
+
+	quint64 ptr();
+	void setPtr(quint64);
+
+	bool isConnected(QNEPort*);
+
+    void setPin( monadic::Pin* p ){ _pin = p; }
+    monadic::Pin* getPin(){ return _pin; }
 
 protected:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
-	int horzMargin;
-	int vertMargin;
-	int width;
-	int height;
+	QNEBlock *m_block;
+	QString name;
+	bool isOutput_;
+	QGraphicsTextItem *label;
+	int radius_;
+	int margin;
+	QVector<QNEConnection*> m_connections;
+	int m_portFlags;
+	quint64 m_ptr;
+
+    monadic::Pin* _pin;
 };
 
-#endif // QNEBLOCK_H
+#endif // QNEPORT_H

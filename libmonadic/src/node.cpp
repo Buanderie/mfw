@@ -63,6 +63,11 @@ namespace monadic
         return ret;
     }
 
+    vector< monadic::Pin* > Node::getPins()
+    {
+        return _pins;
+    }
+
     picojson::object Node::toJSON()
     {
         picojson::object ret;

@@ -40,6 +40,13 @@ monadic::Link::Link(Pin *pin1, Pin *pin2, std::size_t bandwidth, monadic::Link::
 
 monadic::Link::~Link()
 {
+    // disconnect from pins
+    if( _p1 )
+        _p1->removeLink( this );
+
+    if( _p2 )
+        _p2->removeLink( this );
+
     if( _buffer )
         delete _buffer;
 }

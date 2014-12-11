@@ -10,9 +10,6 @@
 #include <iostream>
 #include <string>
 
-// C++11
-//#include <chrono>
-
 // INTERNAL
 #include "kernelmanager.hpp"
 #include "node.hpp"
@@ -51,6 +48,7 @@ namespace monadic
             // Public Link management API
             Link* addLink( monadic::Pin* pin1, monadic::Pin* pin2, std::size_t bandwidth, monadic::Link::LinkMode mode );
             monadic::Guid addLink( const monadic::Guid& n1, const monadic::Guid& n2, const std::string& pin1, const std::string& pin2, size_t bandwidth, Link::LinkMode mode );
+            std::vector< monadic::Link* > getLinks();
 
             // Public Application management API
             bool save( const std::string& filePath );

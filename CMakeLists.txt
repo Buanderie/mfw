@@ -18,6 +18,7 @@ endif()
 
 add_subdirectory(libmonadic)
 add_subdirectory(kernels)
+add_subdirectory(mfwedit)
 
 if( BUILD_TESTS )
     add_subdirectory(googletest)

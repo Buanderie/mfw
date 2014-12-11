@@ -17,7 +17,6 @@ MONADIC_NODE_EXPORT( NumberNode, "Number" )
 
     NumberNode::NumberNode()
     {
-        _kernelName = "Number";
         this->addPin( "out", Pin::NODE_OUTPUT_PIN );
     }
 
@@ -45,10 +44,16 @@ MONADIC_NODE_EXPORT( NumberNode, "Number" )
         		
             for( size_t k = 0; k < _pins.size(); ++k )
             {
-            		monadic::Number n( sin( 3.14159 * ((double)rand() / (double)RAND_MAX) ) );
+                //monadic::Number n( sin( 3.14159 * ((double)rand() / (double)RAND_MAX) ) );
+                monadic::Number n( 77 );
                 ObjectBlob* b = n.serialize();
                 _pins[k]->write( b );
                 delete b;
             }
         }
+    }
+
+    string NumberNode::getKernelName()
+    {
+        return "Number";
     }

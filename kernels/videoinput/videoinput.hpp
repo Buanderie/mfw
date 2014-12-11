@@ -11,7 +11,7 @@ class VideoInputNode : public monadic::Node
         public:
         VideoInputNode();
         virtual ~VideoInputNode();
-        virtual getKernelName();
+        virtual std::string getKernelName();
         void setup();
         void tick( double dt );
 

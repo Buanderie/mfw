@@ -109,7 +109,7 @@ int main ( int argc, char** argv )
     app.addNode( "VideoInput" );
     */
 
-    
+    /*
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
@@ -125,7 +125,6 @@ int main ( int argc, char** argv )
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
-		app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
@@ -141,24 +140,31 @@ int main ( int argc, char** argv )
     app.addNode( "Foo" );
     app.addNode( "Foo" );
     app.addNode( "Foo" );
-    
+    app.addNode( "Foo" );
+    */
+
+
     Node* n1 = app.addNode( "Number" );
-    Node* n5 = app.addNode( "Foo" );
     Node* n2 = app.addNode( "Number" );
     Node* n3 = app.addNode( "Add" );
+
     Node* n4 = app.addNode( "VideoInput" );
     Node* n6 = app.addNode( "VideoDisplay" );
+    Node* n7 = app.addNode( "VideoInput" );
 
     Pin* p1  = n1->findPinFromLabel("out");
     Pin* p2  = n2->findPinFromLabel("out");
     Pin* p3  = n3->findPinFromLabel("in1");
     Pin* p4  = n3->findPinFromLabel("in2");
+
     Pin* p5 = n4->findPinFromLabel("out");
     Pin* p6 = n6->findPinFromLabel("in");
+    Pin* p7 = n7->findPinFromLabel("out");
 
     app.addLink( p1, p3, 1500000, Link::NODE_LINK_BLOCKING );
     app.addLink( p2, p4, 1500000, Link::NODE_LINK_BLOCKING );
-    app.addLink( p5, p6, 6500000, Link::NODE_LINK_NONBLOCKING );
+    app.addLink( p5, p6, 6500000, Link::NODE_LINK_BLOCKING );
+    app.addLink( p7, p6, 6500000, Link::NODE_LINK_BLOCKING );
 
     /*
     app.addNode( "Foo" );
@@ -183,7 +189,7 @@ int main ( int argc, char** argv )
     //app.start();
     //
 
-    //app.save("popo.app");
+    app.save("popo.app");
     //app.load("popo.app");
     //app.enableAllNodes();
     //app.save("popo.app");

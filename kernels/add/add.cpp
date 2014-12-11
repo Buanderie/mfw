@@ -17,7 +17,6 @@ MONADIC_NODE_EXPORT( AddNode, "Add" )
 
     AddNode::AddNode()
     {
-        _kernelName = "Add";
         this->addPin( "in1", Pin::NODE_INPUT_PIN );
         this->addPin( "in2", Pin::NODE_INPUT_PIN );
         this->addPin( "out", Pin::NODE_OUTPUT_PIN );
@@ -45,6 +44,8 @@ MONADIC_NODE_EXPORT( AddNode, "Add" )
         Timer t;
         t.start();
         std::vector<ObjectBlob*> b;
+        bool hasOne = false;
+        bool hasTwo = false;
         for( int k = 0; k < _pins.size(); ++k )
         {
 
@@ -52,7 +53,10 @@ MONADIC_NODE_EXPORT( AddNode, "Add" )
         	{
         		b = _pins[k]->read();
         		if( b.size() > 0 && b[0]->getTypeName() == "Number" )
+                {
         			n1.deserialize( b[0] );
+                    hasOne = true;
+                }
         		for( int i = 0; i < b.size(); ++i )
         		{
         			delete b[i];
@@ -62,7 +66,10 @@ MONADIC_NODE_EXPORT( AddNode, "Add" )
         	{
         		b = _pins[k]->read();
         		if( b.size() > 0 && b[0]->getTypeName() == "Number" )
+                {
         			n2.deserialize( b[0] );
+                    hasTwo = true;
+                }
         		for( int i = 0; i < b.size(); ++i )
         		{
         			delete b[i];
@@ -70,14 +77,22 @@ MONADIC_NODE_EXPORT( AddNode, "Add" )
         	}
         	else if( _pins[k]->getLabel() == "out" )
         	{
-        		out = monadic::Number( n1.getValue() + n2.getValue() );
-        		ObjectBlob* blob = out.serialize();
-        		_pins[k]->write( blob );
-        		cout << out.getValue() << endl;
-        		delete blob;
+                if( hasOne && hasTwo )
+                {
+                    out = monadic::Number( n1.getValue() + n2.getValue() );
+                    ObjectBlob* blob = out.serialize();
+                    _pins[k]->write( blob );
+                    cout << out.getValue() << endl;
+                    delete blob;
+                }
         	}
 
         }
         t.stop();
         //cout << "t=" << t.getElapsedTimeInSec() << " - fps=" << 1.0 / t.getElapsedTimeInSec() << endl;
+    }
+
+    string AddNode::getKernelName()
+    {
+        return "Add";
     }

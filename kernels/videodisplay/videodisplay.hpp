@@ -16,7 +16,7 @@ class VideoDisplayNode : public monadic::Node
 
         void setup();
         void tick( double dt );
-
+        virtual std::string getKernelName();
         private:
         int _cpt;
         std::ofstream pol;

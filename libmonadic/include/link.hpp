@@ -34,6 +34,9 @@ namespace monadic
 
         virtual picojson::object toJSON();
 
+        monadic::Pin* getStartPin(){ return _p1; }
+        monadic::Pin* getEndPin(){ return _p2; }
+
     private:
         monadic::Pin*       _p1;
         monadic::Pin*       _p2;

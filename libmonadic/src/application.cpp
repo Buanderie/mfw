@@ -161,6 +161,11 @@ namespace monadic
 
     }
 
+    vector< monadic::Link* > Application::getLinks()
+    {
+        return _links;
+    }
+
     bool Application::save(const string &filePath)
     {
         picojson::object root;

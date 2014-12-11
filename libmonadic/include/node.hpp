@@ -86,6 +86,7 @@ namespace monadic
 
         monadic::Pin* addPin( const std::string& pinLabel, monadic::Pin::PinMode mode );
         monadic::Pin* findPinFromLabel( const std::string& pinLabel );
+        std::vector< monadic::Pin* > getPins();
 
         virtual picojson::object toJSON();
 

@@ -17,7 +17,6 @@ MONADIC_NODE_EXPORT( BarNode, "Bar" )
 
     BarNode::BarNode()
     {
-        _kernelName = "Bar";
         std::cout << "Bar::CTOR" << std::endl;
         this->addPin( "cul", Pin::NODE_INPUT_PIN );
         cout << "POLOP " << this->_pins.size() << endl;
@@ -69,4 +68,9 @@ MONADIC_NODE_EXPORT( BarNode, "Bar" )
             cout << getGuid() << " t=" << t.getElapsedTimeInSec() << " - fps=" << 1.0 / t.getElapsedTimeInSec() << endl;
         }
         //usleep(33333);
+    }
+
+    string BarNode::getKernelName()
+    {
+        return "Bar";
     }

@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include "ui_qnemainwindow.h"
 
 #include "qneblock.h"
+#include "qneconnection.h"
 #include "qnodeseditor.h"
 
 #include <QGraphicsScene>
@@ -34,33 +35,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 #include "qneport.h"
 
+
+
 QNEMainWindow::QNEMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::QNEMainWindow)
 {
     ui->setupUi(this);
 
+    _app = new monadic::Application( "../kernels/" );
+
     QGraphicsScene *s = new QGraphicsScene();
     s->setBackgroundBrush( QBrush(QColor::fromRgb(49,54,56)));
     ui->graphicsView->setScene(s);
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-    // ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-
-    QNEBlock *b = new QNEBlock(0, s);
-    b->addPort("test", 0, QNEPort::NamePort);
-    b->addPort("TestBlock", 0, QNEPort::TypePort);
-    b->addInputPort("in1");
-    b->addInputPort("in2");
-    b->addInputPort("in3");
-    b->addOutputPort("out1");
-    b->addOutputPort("out2");
-    b->addOutputPort("out3");
-
-    b = b->clone();
-    b->setPos(150, 0);
-
-    b = b->clone();
-    b->setPos(150, 150);
 
     nodesEditor = new QNodesEditor(this);
     nodesEditor->install(s);
@@ -95,10 +83,66 @@ void QNEMainWindow::loadFile()
 	if (fname.isEmpty())
 		return;
 
-	QFile f(fname);
-	f.open(QFile::ReadOnly);
-	QDataStream ds(&f);
-	nodesEditor->load(ds);
+    _app->load( fname.toStdString() );
+    std::vector< monadic::Node* > lnodes = _app->getNodes();
+    for( int k = 0; k < lnodes.size(); ++k )
+    {
+        monadic::Node* n = lnodes[k];
+        QNEBlock *b = new QNEBlock(0, ui->graphicsView->scene());
+        _blocks.push_back( b );
+
+        b->setNode( n );
+        b->addPort( QString::fromStdString(n->getKernelName()), 0, QNEPort::TypePort );
+        vector< monadic::Pin* > pins = n->getPins();
+        for( int i = 0; i < pins.size(); ++i )
+        {
+            monadic::Pin* p = pins[i];
+            QNEPort* port;
+            if( p->getMode() == monadic::Pin::NODE_INPUT_PIN )
+            {
+                port = b->addInputPort( QString::fromStdString(p->getLabel()) );
+            }
+            else if( p->getMode() == monadic::Pin::NODE_OUTPUT_PIN )
+            {
+                port = b->addOutputPort( QString::fromStdString( p->getLabel() ) );
+            }
+
+            port->setPin( p );
+            _ports.push_back( port );
+
+        }
+    }
+
+    std::vector< monadic::Link* > llinks = _app->getLinks();
+    for( int k = 0; k < llinks.size(); ++k )
+    {
+        monadic::Link* l = llinks[k];
+        QNEConnection* conn = new QNEConnection(0, ui->graphicsView->scene());
+        conn->setLink( l );
+        _connections.push_back( conn );
+
+        monadic::Pin* p1 = l->getStartPin();
+        monadic::Pin* p2 = l->getEndPin();
+
+        QNEPort* port1;
+        QNEPort* port2;
+        for( int i = 0; i < _ports.size(); ++i )
+        {
+            if( _ports[i]->getPin() == p1 )
+                port1 = _ports[i];
+
+            if( _ports[i]->getPin() == p2 )
+                port2 = _ports[i];
+        }
+
+        conn->setPort1( port1 );
+        conn->setPort2( port2 );
+
+    }
+
+    _app->enableAllNodes();
+    _app->start();
+
 }
 
 void QNEMainWindow::addBlock()

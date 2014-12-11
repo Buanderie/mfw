@@ -23,8 +23,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-#include "qnodeseditor.h"
-
 #include <QGraphicsScene>
 #include <QEvent>
 #include <QGraphicsSceneMouseEvent>
@@ -32,11 +30,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include "qneport.h"
 #include "qneconnection.h"
 #include "qneblock.h"
+#include "qnodeseditor.h"
+
 
 QNodesEditor::QNodesEditor(QObject *parent) :
     QObject(parent)
 {
-	conn = 0;
+    conn = 0;
+    parentWindow = (QNEMainWindow*)parent;
+
+}
+
+QNodesEditor::~QNodesEditor()
+{
 }
 
 void QNodesEditor::install(QGraphicsScene *s)
@@ -71,7 +77,7 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 			QGraphicsItem *item = itemAt(me->scenePos());
 			if (item && item->type() == QNEPort::Type)
 			{
-				conn = new QNEConnection(0, scene);
+                conn = new QNEConnection(0, scene);
 				conn->setPort1((QNEPort*) item);
 				conn->setPos1(item->scenePos());
 				conn->setPos2(me->scenePos());
@@ -91,8 +97,6 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 			QGraphicsItem *item = itemAt(me->scenePos());
 			if (item && (item->type() == QNEConnection::Type || item->type() == QNEBlock::Type))
 				delete item;
-			// if (selBlock == (QNEBlock*) item)
-				// selBlock = 0;
 			break;
 		}
 		}
@@ -121,6 +125,11 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 				{
 					conn->setPos2(port2->scenePos());
 					conn->setPort2(port2);
+                    monadic::Application* app = parentWindow->getApp();
+                    monadic::Pin* p1 = port1->getPin();
+                    monadic::Pin* p2 = port2->getPin();
+                    monadic::Link* l = app->addLink( p1, p2, 65000000, monadic::Link::NODE_LINK_BLOCKING );
+                    conn->setLink( l );
 					conn->updatePath();
 					conn = 0;
 					return true;
