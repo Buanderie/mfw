@@ -30,11 +30,11 @@ bool monadic::Pin::write(monadic::ObjectBlob *blob)
     }
     else if( _mode == Pin::NODE_OUTPUT_PIN )
     {
-//#pragma omp parallel for
         for( size_t k = 0; k < _links.size(); ++k )
         {
             Link* l = _links[k];
-            l->write( blob );
+            if( l->freeSpace() > blob->data_size() )
+                l->write( blob );
         }
         ret = true;
     }
@@ -53,13 +53,16 @@ std::vector< monadic::ObjectBlob * > monadic::Pin::read()
     _mtx.lock();
     if( _mode == Pin::NODE_INPUT_PIN )
     {
-//#pragma omp parallel for
+        //#pragma omp parallel for
         for( std::size_t k = 0; k < _links.size(); ++k )
         {
             Link* l = _links[k];
-            ObjectBlob* b = l->read();
-            if( b != 0 )
-                res.push_back( b );
+            if( l->hasData() )
+            {
+                ObjectBlob* b = l->read();
+                if( b != 0 )
+                    res.push_back( b );
+            }
         }
     }
     else if( _mode == Pin::NODE_OUTPUT_PIN )

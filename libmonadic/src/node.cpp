@@ -48,7 +48,6 @@ namespace monadic
 
     Pin *Node::findPinFromLabel(const string &pinLabel)
     {
-        //cout << "this=" << this << " - " << _pins.size() << endl;
         Pin* ret = 0;
         _nodeMtx.lock();
         for( size_t k = 0; k < _pins.size(); ++k )

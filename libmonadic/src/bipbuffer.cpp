@@ -39,6 +39,11 @@ size_t monadic::BipBuffer::size()
     return _size;
 }
 
+size_t monadic::BipBuffer::capacity()
+{
+    return _capacity;
+}
+
 size_t monadic::BipBuffer::blobs()
 {
     return _blobs.size();

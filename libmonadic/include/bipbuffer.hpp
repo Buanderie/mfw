@@ -27,6 +27,7 @@ namespace monadic
         virtual ~BipBuffer();
         void resize( size_t size );
         size_t size();
+        size_t capacity();
         size_t blobs();
 
         bool push(const void *data, size_t length );

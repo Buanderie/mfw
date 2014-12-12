@@ -122,6 +122,24 @@ size_t Link::occupation()
     return ret;
 }
 
+bool Link::hasData()
+{
+    bool ret = false;
+    _linkMtx.lock();
+    ret = (_buffer->size() != 0 );
+    _linkMtx.unlock();
+    return ret;
+}
+
+size_t Link::freeSpace()
+{
+    size_t ret = 0;
+    _linkMtx.lock();
+    ret = ( _buffer->capacity() - _buffer->size() );
+    _linkMtx.unlock();
+    return ret;
+}
+
 picojson::object Link::toJSON()
 {
     picojson::object ret;

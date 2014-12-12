@@ -31,6 +31,8 @@ namespace monadic
         void write( monadic::ObjectBlob* blob );
         monadic::ObjectBlob* read();
         std::size_t occupation();
+        bool hasData();
+        std::size_t freeSpace();
 
         virtual picojson::object toJSON();
 

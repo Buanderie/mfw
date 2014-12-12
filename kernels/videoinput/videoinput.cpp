@@ -36,7 +36,7 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
 
     void VideoInputNode::setup()
     {
-        cv::VideoCapture* cap = new cv::VideoCapture("/home/said/videos/valls.mp4");
+        cv::VideoCapture* cap = new cv::VideoCapture(0);
         //cv::VideoCapture* cap = new cv::VideoCapture(0);
         _cap = (void*)cap;
     }
@@ -74,7 +74,7 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
             }
             else
             {
-                cout << "nononono" << endl;
+                this->disable();
             }
         }
         t.stop();
