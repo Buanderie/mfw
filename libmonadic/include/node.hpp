@@ -20,7 +20,6 @@
 #include "thread.hpp"
 #include "pin.hpp"
 
-
 namespace monadic
 {
     class Application;
