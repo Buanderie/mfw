@@ -9,7 +9,7 @@ namespace monadic
 		bool ApplicationWorker::run()
 		{
             //cout << "loulou" << endl;
-			while( 1 )
+            while( getStatus() != monadic::Thread::THREAD_WAITSTOP )
 			{
                 //cout << "Fetching new node" << endl;
                 Node* n = _app->fetchActiveNode();

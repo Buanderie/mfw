@@ -71,10 +71,8 @@ void QNEMainWindow::saveFile()
 	if (fname.isEmpty())
 		return;
 
-	QFile f(fname);
-	f.open(QFile::WriteOnly);
-	QDataStream ds(&f);
-	nodesEditor->save(ds);
+    _app->save( fname.toStdString() );
+
 }
 
 void QNEMainWindow::loadFile()

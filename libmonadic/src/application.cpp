@@ -18,7 +18,7 @@ namespace monadic
     void Application::init()
     {
         int numCores = System::getNumCores();
-        for( int k = 0; k < numCores; ++k )
+        for( int k = 0; k < numCores*2; ++k )
         {
         	_workers.push_back( new ApplicationWorker(this) );
         }
@@ -168,8 +168,8 @@ namespace monadic
 
     bool Application::save(const string &filePath)
     {
+        _nodeListMtx.lock();
         picojson::object root;
-
         // Save nodes
         picojson::array nodeArray;
         map< monadic::Guid, monadic::Node* >::iterator nitr;
@@ -196,12 +196,13 @@ namespace monadic
         ofstream ofs( filePath.c_str() );
         ofs << str;
         ofs.close();
-
+        _nodeListMtx.unlock();
         return true;
     }
 
     bool Application::load(const string &filePath)
     {
+        _nodeListMtx.lock();
         _nodes.clear();
         _links.clear();
 
@@ -263,7 +264,7 @@ namespace monadic
             this->addLink( startNode, endNode, startPin, endPin, lbandwidth, lmode );
         }
 
-
+        _nodeListMtx.unlock();
         return true;
     }
 
