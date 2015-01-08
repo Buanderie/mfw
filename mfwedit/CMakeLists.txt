@@ -1,4 +1,7 @@
-PROJECT(mfwedit)
+PROJECT(MFWEDIT)
+
+# Set custom cmake scripts directory
+set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${MFWEDIT_SOURCE_DIR}/cmake")
 
 FIND_PACKAGE(Qt4 REQUIRED)
 

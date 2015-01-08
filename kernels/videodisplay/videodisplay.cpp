@@ -57,9 +57,10 @@ MONADIC_NODE_EXPORT( VideoDisplayNode, "VideoDisplay" )
     {
         Timer t;
         t.start();
+
         SDL_Event event;
         // Check for messages
-        if (SDL_PollEvent(&event))
+        while (SDL_PollEvent(&event))
         {
             // Check for the quit message
             if (event.type == SDL_QUIT)
@@ -67,8 +68,6 @@ MONADIC_NODE_EXPORT( VideoDisplayNode, "VideoDisplay" )
                 // Quit the program
                 return;
             }
-            
-            //cout << "event.type=" << (int)(event.type) << endl;
         }
 
         Pin* p = this->findPinFromLabel("in");
@@ -106,7 +105,7 @@ MONADIC_NODE_EXPORT( VideoDisplayNode, "VideoDisplay" )
                     //Update the display
                     SDL_Flip(display);
 
-                    //delete surface;
+					//SDL_PumpEvents();
 
 					SDL_FreeSurface(surface);
                 }

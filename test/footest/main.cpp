@@ -47,7 +47,7 @@ int main ( int argc, char** argv )
 
     Node* n;
 
-    Application app( "C:\\Users\\imagedpt\\dev\\mfw-build\\kernels" );
+    Application app( argv[1] );
     //vector< Node* > nodes;
     
     /*
@@ -150,7 +150,7 @@ int main ( int argc, char** argv )
 
 	Node* n4 = app.addNode("VideoInput");
 	Node* n6 = app.addNode("VideoDisplay");
-	Node* n7 = app.addNode("FastDetector");
+	Node* n7 = app.addNode("Blur");
 	Node* n8 = app.addNode("Sobel");
 
 	Pin* p1 = n1->findPinFromLabel("out");

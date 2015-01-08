@@ -19,7 +19,7 @@ endif()
 
 add_subdirectory(libmonadic)
 add_subdirectory(kernels)
-#add_subdirectory(mfwedit)
+add_subdirectory(mfwedit)
 
 if( BUILD_TEST_APPS )
     add_subdirectory( test )

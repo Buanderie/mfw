@@ -33,7 +33,7 @@ bool monadic::Pin::write(monadic::ObjectBlob *blob)
         for( size_t k = 0; k < _links.size(); ++k )
         {
             Link* l = _links[k];
-            if( l->freeSpace() > blob->data_size() )
+            //if( l->freeSpace() > blob->data_size() )
                 l->write( blob );
         }
         ret = true;
@@ -57,7 +57,7 @@ std::vector< monadic::ObjectBlob * > monadic::Pin::read()
         for( std::size_t k = 0; k < _links.size(); ++k )
         {
             Link* l = _links[k];
-            if( l->hasData() )
+            //if( l->hasData() )
             {
                 ObjectBlob* b = l->read();
                 if( b != 0 )
