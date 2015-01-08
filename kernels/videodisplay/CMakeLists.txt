@@ -14,10 +14,10 @@ if( SDL_FOUND )
         set( DEPS "${DEPS};${SDL_LIBRARY}" )
 endif()
 
+LINK_DIRECTORIES( ${LIBMONADIC_BINARY_DIR} )
 include_directories( ${LIBMONADIC_SOURCE_DIR}/include )
 set( DEPS "${DEPS};monadic" )
 
-message( "${DEPS}" )
-
 add_library( node_videodisplay SHARED videodisplay.cpp )
 target_link_libraries( node_videodisplay ${DEPS} )
+add_dependencies( node_videodisplay monadic )

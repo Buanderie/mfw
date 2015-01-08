@@ -6,12 +6,11 @@ include_directories(${LIBMONADIC_SOURCE_SIR}/include)
 project(MonadicFramework_Test)
 include_directories(${LIBMONADIC_SOURCE_SIR}/include)
 
-message("pol: ${LIBMONADIC_SOURCE_DIR}/include")
-
 
 #-------------------
 # Test
 #-------------------
+if( BUILD_UNIT_TESTS )
 #add_definitions(${MSVC_COMPILER_DEFS})
 enable_testing()
 include_directories(${LIBMONADIC_SOURCE_SIR}/include)
@@ -44,6 +43,7 @@ else()
 endif()
 
 include_directories(${LIBMONADIC_SOURCE_SIR}/include)
+endif( BUILD_UNIT_TESTS )
 
 #-------------------
 # Miscellaneous Test Projects

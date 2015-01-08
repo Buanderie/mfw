@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <cstring>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include <SDL/SDL.h>
 
@@ -106,7 +106,9 @@ MONADIC_NODE_EXPORT( VideoDisplayNode, "VideoDisplay" )
                     //Update the display
                     SDL_Flip(display);
 
-                    delete surface;
+                    //delete surface;
+
+					SDL_FreeSurface(surface);
                 }
             }
         }

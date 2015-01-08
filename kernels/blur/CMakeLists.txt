@@ -7,10 +7,10 @@ if( OpenCV_FOUND )
         set( DEPS "${DEPS};${OpenCV_LIBS}" )
 endif()
 
+LINK_DIRECTORIES( ${LIBMONADIC_BINARY_DIR} )
 include_directories( ${LIBMONADIC_SOURCE_DIR}/include )
 set( DEPS "${DEPS};monadic" )
 
-message( "${DEPS}" )
-
 add_library( node_blur SHARED blur.cpp )
+ADD_DEPENDENCIES( node_blur monadic )
 target_link_libraries( node_blur ${DEPS} )

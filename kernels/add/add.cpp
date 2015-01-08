@@ -82,7 +82,7 @@ MONADIC_NODE_EXPORT( AddNode, "Add" )
                     out = monadic::Number( n1.getValue() + n2.getValue() );
                     ObjectBlob* blob = out.serialize();
                     _pins[k]->write( blob );
-                    cout << out.getValue() << endl;
+                    //cout << out.getValue() << endl;
                     delete blob;
                 }
         	}

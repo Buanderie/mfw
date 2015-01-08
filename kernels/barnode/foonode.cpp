@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstring>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include <objects/base/number.hpp>
 #include <objects/image/image.hpp>

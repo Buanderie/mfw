@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#include <string>
+
 #include "guid.hpp"
 
 #ifdef __LINUX__
@@ -163,8 +165,9 @@ bool monadic::Guid::operator!=(const monadic::Guid &other) const
     return !((*this) == other);
 }
 
-bool monadic::Guid::operator <(const monadic::Guid &other) const
+bool monadic::Guid::operator < (const monadic::Guid &other) const
 {
+	/*
     bool ret = false;
     for( size_t k = 0; k < _bytes.size(); ++k )
     {
@@ -175,6 +178,9 @@ bool monadic::Guid::operator <(const monadic::Guid &other) const
         }
     }
     return ret;
+	*/
+
+	return std::lexicographical_compare( _bytes.begin(), _bytes.end(), other._bytes.begin(), other._bytes.end() );
 }
 
 string monadic::Guid::toString()

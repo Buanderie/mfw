@@ -251,7 +251,7 @@ namespace monadic
         {
             // retrieve node object
             picojson::object jl = linkArray[k].get<picojson::object>();
-            Link::LinkMode lmode = (Link::LinkMode)(jl["mode"].get<double>());
+            Link::LinkMode lmode = (Link::LinkMode)(int)(jl["mode"].get<double>());
             size_t lbandwidth = (unsigned int)(jl["bandwidth"].get<double>());
             monadic::Guid startNode = monadic::Guid( jl["startnode"].get<string>() );
             monadic::Guid endNode = monadic::Guid( jl["endnode"].get<string>() );

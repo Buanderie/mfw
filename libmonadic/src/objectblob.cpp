@@ -34,10 +34,10 @@ monadic::ObjectBlob::ObjectBlob(void *ptr, std::size_t size)
         reserve( _blobSize );
         memcpy( _data, ptr, size );
         size_t strNameSize = (size_t)(_data[0]);
-        char* strName = new char[ strNameSize ];
-        memcpy( strName, _data + 1, strNameSize );
+        char* strName = new char[ strNameSize + 1 ];
+        strncpy( strName, (const char*)(_data + 1), strNameSize );
         strName[ strNameSize ] = 0;
-        _typeName = strName;
+        _typeName = std::string( strdup(strName) );
         delete[] strName;
         _poppedSize = 0;
         _pushedSize = _blobSize;

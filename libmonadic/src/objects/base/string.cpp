@@ -33,7 +33,7 @@ void monadic::String::deserialize(monadic::ObjectBlob *blob)
 {
     size_t strSize = blob->pop<size_t>();
     cout << "strSize=" << strSize << endl;
-    char tmpStr[ strSize + 1 ];
+    char * tmpStr = new char[ strSize + 1 ];
     blob->popArray( tmpStr, strSize + 1 );
     cout << "tmpStr=#" << tmpStr << "#" << endl;
     _value = tmpStr;

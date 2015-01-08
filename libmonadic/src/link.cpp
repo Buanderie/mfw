@@ -85,7 +85,7 @@ monadic::ObjectBlob *monadic::Link::read()
             _linkReadCnd.wait( _linkMtx );
         }
         size_t blobSize = _buffer->peekSize();
-        unsigned char* blobTmp = new unsigned char[ blobSize ];
+        unsigned char* blobTmp = new unsigned char[ blobSize + 1 ];
         _buffer->pop( blobTmp );
         blob = new ObjectBlob( blobTmp, blobSize );
         delete[] blobTmp;

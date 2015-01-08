@@ -5,6 +5,7 @@
 
 // STL
 #include <iostream>
+#include <algorithm>
 
 // INTERNAL
 #include "bipbuffer.hpp"
