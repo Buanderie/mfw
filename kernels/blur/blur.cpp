@@ -45,7 +45,14 @@ MONADIC_NODE_EXPORT( BlurNode, "Blur" )
         t.start();
         Pin* outPin = findPinFromLabel("out");
         Pin* inPin = findPinFromLabel("in");
-        if( outPin->isConnected() && inPin->isConnected() )
+
+        if( !outPin->isConnected() )
+            waitForConnection();
+
+        if( !inPin->isConnected() )
+            waitForConnection();
+
+        if( inPin->isConnected() && outPin->isConnected() )
         {
             vector<ObjectBlob*> b = inPin->read();
             if( b.size() > 0 )

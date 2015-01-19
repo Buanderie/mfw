@@ -45,6 +45,13 @@ MONADIC_NODE_EXPORT( SobelNode, "Sobel" )
         t.start();
         Pin* outPin = findPinFromLabel("out");
         Pin* inPin = findPinFromLabel("in");
+
+        if( !outPin->isConnected() )
+            waitForConnection();
+
+        if( !inPin->isConnected() )
+            waitForConnection();
+
         if( outPin->isConnected() && inPin->isConnected() )
         {
             vector<ObjectBlob*> b = inPin->read();

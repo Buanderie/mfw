@@ -71,6 +71,12 @@ MONADIC_NODE_EXPORT( VideoDisplayNode, "VideoDisplay" )
         }
 
         Pin* p = this->findPinFromLabel("in");
+
+        if( !p->isConnected() )
+        {
+            waitForConnection();
+        }
+
         vector<ObjectBlob*> b = p->read();
         if( b.size() > 0 )
         {

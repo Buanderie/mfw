@@ -1,4 +1,4 @@
-#include "fastdetector.hpp"
+#include "mser.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -16,32 +16,32 @@
 using namespace std;
 using namespace monadic;
 
-MONADIC_NODE_EXPORT( FastDetectorNode, "FastDetector" )
+MONADIC_NODE_EXPORT( MSERNode, "MSER" )
 
-    FastDetectorNode::FastDetectorNode()
+    MSERNode::MSERNode()
     {
-        detector = (void*)(new cv::FastFeatureDetector());
+        detector = (void*)( new cv::MSER(25, (int)(0.00002*640.0*480.0), (int)(0.005*640.0*480.0), 1, 0.7));
         std::cout << "Sobel::CTOR" << std::endl;
         this->addPin( "out", monadic::Pin::NODE_OUTPUT_PIN );
         this->addPin( "in", monadic::Pin::NODE_INPUT_PIN );
     }
 
-    FastDetectorNode::~FastDetectorNode()
+    MSERNode::~MSERNode()
     {
         std::cout << "Sobel::DTOR" << std::endl;
     }
 
-    std::string FastDetectorNode::getKernelName()
+    std::string MSERNode::getKernelName()
     {
-        return "FastDetector";
+        return "MSER";
     }
 
-    void FastDetectorNode::setup()
+    void MSERNode::setup()
     {
 
     }
 
-    void FastDetectorNode::tick( double dt )
+    void MSERNode::tick( double dt )
     {
         Timer t;
         t.start();
@@ -67,21 +67,24 @@ MONADIC_NODE_EXPORT( FastDetectorNode, "FastDetector" )
                         img.deserialize(b[k]);
                         cv::Mat m( img.getHeight(), img.getWidth(), CV_8UC3, img.ptr() );
                         cv::Mat res( img.getHeight(), img.getWidth(), CV_8UC3 );
-
-
-                        //cv::blur( m, res, cv::Size(10,10) );
                         res = m.clone();
-                        cv::FastFeatureDetector* det = (cv::FastFeatureDetector*)(detector);
-                        vector< cv::KeyPoint > kps;
-                        det->detect( m, kps );
-                        for( size_t i = 0; i < kps.size(); ++i )
+
+                        cv::cvtColor( m, m, CV_RGB2GRAY );
+
+                        vector< vector< cv::Point > > ret;
+                        cv::MSER* det = (cv::MSER*)(detector);
+                        (*det)(m, ret);
+
+                        for( size_t i = 0; i < ret.size(); ++i )
                         {
-                            cv::circle( res, kps[i].pt, 3, CV_RGB(255,0,0) );
+                            //cv::circle( res, kps[i].pt, 3, CV_RGB(255,0,0) );
+                            cv::Rect r = cv::boundingRect(ret[i]);
+                            cv::rectangle( res, r, CV_RGB(255,0,0), 3 );
                         }
 
                         monadic::Image imgout;
-                        imgout.create( m.cols, m.rows, 8, m.channels() );
-                        size_t bufferSize = m.cols * m.rows * m.channels();
+                        imgout.create( res.cols, res.rows, 8, res.channels() );
+                        size_t bufferSize = res.cols * res.rows * res.channels();
                         imgout.copyFrom( (char*)res.data, bufferSize );
                         ObjectBlob* bout = imgout.serialize();
                         outPin->write( bout );

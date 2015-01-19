@@ -39,6 +39,27 @@ namespace monadic
         _nodeMtx.unlock();
     }
 
+    void Node::OnLinkConnected(Link *link)
+    {
+        _connMtx.lock();
+        _connCnd.signal();
+        _connMtx.unlock();
+    }
+
+    void Node::OnLinkDisconnected(Link *link)
+    {
+        _connMtx.lock();
+        _connCnd.signal();
+        _connMtx.unlock();
+    }
+
+    void Node::waitForConnection()
+    {
+        _connMtx.lock();
+        _connCnd.wait( _connMtx );
+        _connMtx.unlock();
+    }
+
     Pin *Node::addPin(const std::string &pinLabel, Pin::PinMode mode)
     {
         Pin* p = new Pin( this, pinLabel, mode );
@@ -65,6 +86,16 @@ namespace monadic
     vector< monadic::Pin* > Node::getPins()
     {
         return _pins;
+    }
+
+    bool Node::setParameter(const string &name, Object &value)
+    {
+        return true;
+    }
+
+    Object *Node::getParameter(const string &name)
+    {
+        return 0;
     }
 
     picojson::object Node::toJSON()

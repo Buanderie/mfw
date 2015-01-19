@@ -36,8 +36,8 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
 
     void VideoInputNode::setup()
     {
-        cv::VideoCapture* cap = new cv::VideoCapture("C:\\Users\\imagedpt\\dev\\outputVideo.avi");
-        //cv::VideoCapture* cap = new cv::VideoCapture(0);
+        //cv::VideoCapture* cap = new cv::VideoCapture("C:\\Users\\imagedpt\\dev\\outputVideo.avi");
+        cv::VideoCapture* cap = new cv::VideoCapture(0);
         _cap = (void*)cap;
     }
 
@@ -48,6 +48,10 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
         cv::Mat frame;
         cv::VideoCapture* cap = (cv::VideoCapture*)_cap;
         Pin* outPin = findPinFromLabel("out");
+
+        if( !outPin->isConnected() )
+            waitForConnection();
+
         if( outPin->isConnected() )
         {
             if( cap->grab() )

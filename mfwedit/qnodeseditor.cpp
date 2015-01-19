@@ -128,7 +128,7 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
                     monadic::Application* app = parentWindow->getApp();
                     monadic::Pin* p1 = port1->getPin();
                     monadic::Pin* p2 = port2->getPin();
-                    monadic::Link* l = app->addLink( p1, p2, 65000000, monadic::Link::NODE_LINK_BLOCKING );
+                    monadic::Link* l = app->addLink( p1, p2, 65000000, monadic::Link::NODE_LINK_NONBLOCKING );
                     conn->setLink( l );
 					conn->updatePath();
 					conn = 0;

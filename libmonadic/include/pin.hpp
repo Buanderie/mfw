@@ -30,6 +30,8 @@ namespace monadic
 
         Pin( monadic::Node* parentNode, const std::string& name, monadic::Pin::PinMode mode);
         virtual ~Pin();
+        virtual void OnLinkConnected( monadic::Link* link );
+        virtual void OnLinkDisconnected( monadic::Link* link );
 
         bool write( monadic::ObjectBlob* blob );
         std::vector< monadic::ObjectBlob* > read();
@@ -37,6 +39,7 @@ namespace monadic
         monadic::Node* getParent();
         monadic::Pin::PinMode getMode();
         bool isConnected();
+        void waitForConnection();
 
     private:
         std::string                     _name;
@@ -44,6 +47,9 @@ namespace monadic
         monadic::Node*                  _parent;
         std::vector< monadic::Link* >   _links;
         monadic::Mutex                  _mtx;
+
+        monadic::Mutex                  _linkMtx;
+        monadic::CondVar                _linkCnd;
 
         void addLink( Link* l );
         void removeLink( monadic::Link* link );
