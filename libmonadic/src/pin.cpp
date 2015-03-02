@@ -11,7 +11,7 @@ using namespace monadic;
 monadic::Pin::Pin(Node *parentNode, const std::string& name, monadic::Pin::PinMode mode )
     :_name(name), _mode(mode), _parent(parentNode)
 {
-
+    resetGuid();
 }
 
 monadic::Pin::~Pin()

@@ -152,8 +152,8 @@ int main ( int argc, char** argv )
 	Node* n6 = app.addNode("VideoDisplay");
 	Node* n7 = app.addNode("Blur");
 	Node* n8 = app.addNode("Sobel");
-    Node* n9 = app.addNode("MSER");
-    Node* n10 = app.addNode("VideoDisplay");
+    Node* n9 = app.addNode("FastDetector");
+    //Node* n10 = app.addNode("VideoDisplay");
 
     //Pin* p1 = n1->findPinFromLabel("out");
     //Pin* p2 = n2->findPinFromLabel("out");
@@ -167,8 +167,8 @@ int main ( int argc, char** argv )
 
     //app.addLink(p1, p3, 1500000, Link::NODE_LINK_NONBLOCKING);
     //app.addLink(p2, p4, 1500000, Link::NODE_LINK_NONBLOCKING);
-    app.addLink(p5, p8, 6500000, Link::NODE_LINK_NONBLOCKING);
-    app.addLink( p7, p6, 6500000, Link::NODE_LINK_NONBLOCKING );
+    app.addLink(p5, p6, 6500000, Link::NODE_LINK_BLOCKING);
+    //app.addLink( p7, p6, 6500000, Link::NODE_LINK_NONBLOCKING );
 
     /*
     app.addNode( "Foo" );

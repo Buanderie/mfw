@@ -12,10 +12,11 @@
 #include "link.hpp"
 #include "thread.hpp"
 #include "objectblob.hpp"
+#include "identifiable.hpp"
 
 namespace monadic
 {
-    class Pin
+    class Pin : public monadic::Identifiable
     {
 
         friend class Link;

@@ -7,8 +7,14 @@
 #include "pin.hpp"
 #include "node.hpp"
 
+#ifdef __USE_ZMQ__
+#include <zmq.hpp>
+#endif
+
 using namespace std;
 using namespace monadic;
+
+extern void * zmq_context;
 
 monadic::Link::Link(Pin *pin1, Pin *pin2, std::size_t bandwidth, monadic::Link::LinkMode mode )
     :_p1(pin1)
@@ -16,7 +22,24 @@ monadic::Link::Link(Pin *pin1, Pin *pin2, std::size_t bandwidth, monadic::Link::
     ,_bandwidth(bandwidth)
     ,_mode(mode)
     ,_buffer(0)
+#ifdef __USE_ZMQ__
+    ,_zmqReceiver(0)
+    ,_zmqSender(0)
+#endif
+
 {
+#ifdef __USE_ZMQ__
+    _zmqReceiver = zmq_socket (zmq_context, ZMQ_PULL);
+    _zmqSender = zmq_socket (zmq_context, ZMQ_PUSH);
+
+    // Bind receiver
+    int rc = zmq_bind ( _zmqReceiver, std::string("inproc://" + _p2->getGuid().toString()).c_str());
+
+    cout << "rc=" << rc << endl;
+
+    rc = zmq_bind ( _zmqReceiver, std::string("inproc://" + _p1->getGuid().toString()).c_str());
+    cout << "rc=" << rc << endl;
+#else
     monadic::BipBuffer::BipBufferStrategy strategy;
     switch( _mode )
     {
@@ -33,9 +56,9 @@ monadic::Link::Link(Pin *pin1, Pin *pin2, std::size_t bandwidth, monadic::Link::
         break;
     }
     _buffer = new monadic::BipBuffer( _bandwidth, strategy );
+#endif
     _p1->addLink( this );
     _p2->addLink( this );
-
 }
 
 monadic::Link::~Link()
@@ -49,10 +72,21 @@ monadic::Link::~Link()
 
     if( _buffer )
         delete _buffer;
+
+#ifdef __USE_ZMQ__
+    if( _zmqSender )
+        zmq_close (_zmqSender);
+    if( _zmqReceiver )
+        zmq_close (_zmqReceiver);
+#endif
+
 }
 
 void monadic::Link::write(monadic::ObjectBlob *blob)
 {
+#ifdef __USE_ZMQ__
+
+#else
     _linkMtx.lock();
     //cout << "before pushing" << endl;
     bool ret = _buffer->push( blob->data(), blob->data_size() );
@@ -70,11 +104,15 @@ void monadic::Link::write(monadic::ObjectBlob *blob)
         }
     }
     _linkMtx.unlock();
+#endif
 }
 
 monadic::ObjectBlob *monadic::Link::read()
 {
     ObjectBlob* blob = 0;
+#ifdef __USE_ZMQ__
+
+#else
     _linkMtx.lock();
     switch( _mode )
     {
@@ -110,6 +148,7 @@ monadic::ObjectBlob *monadic::Link::read()
     }
     }
     _linkMtx.unlock();
+#endif
     return blob;
 }
 

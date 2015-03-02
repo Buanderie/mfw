@@ -48,6 +48,9 @@ namespace monadic
         monadic::CondVar    _linkReadCnd;
         monadic::CondVar    _linkWriteCnd;
 
+        void *              _zmqReceiver;
+        void *              _zmqSender;
+
         // Internal Buffer
         monadic::BipBuffer* _buffer;
 

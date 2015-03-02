@@ -37,7 +37,8 @@ MONADIC_NODE_EXPORT( VideoInputNode, "VideoInput" )
     void VideoInputNode::setup()
     {
         //cv::VideoCapture* cap = new cv::VideoCapture("C:\\Users\\imagedpt\\dev\\outputVideo.avi");
-        cv::VideoCapture* cap = new cv::VideoCapture(0);
+        //cv::VideoCapture* cap = new cv::VideoCapture(0);
+        cv::VideoCapture* cap = new cv::VideoCapture("/home/said/videos/valls.mp4");
         _cap = (void*)cap;
     }
 

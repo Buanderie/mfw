@@ -3,9 +3,12 @@ project (LIBMONADIC)
 
 # Set custom cmake scripts directory
 set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${LIBMONADIC_SOURCE_DIR}/cmake")
+
 # Set CMake options
 set( USE_CUDA FALSE CACHE BOOL "Use nVidia CUDA as GPGPU API")
 option(USE_CLANG "build application with clang" OFF) # OFF is the default
+
+option( USE_ZMQ "Use 0MQ for message passing" OFF)
 
 # Configure CLANG
 if( USE_CLANG )
@@ -38,6 +41,19 @@ IF( CUDA_FOUND )
     ADD_DEFINITIONS( -D__WITH_CUDA__ )
 ENDIF()
 ENDIF()
+
+# Look for 0MQ
+IF( USE_ZMQ )
+find_package(ZeroMQ REQUIRED)
+if(ZEROMQ_FOUND)
+set( DEPS "${DEPS};${ZeroMQ_LIBRARIES}" )
+include_directories( ${ZeroMQ_INCLUDE_DIR} )
+ADD_DEFINITIONS( -D__USE_ZMQ__ )
+else()
+message("Can't find ZeroMQ")
+endif()
+ENDIF( USE_ZMQ )
+
 
 # Add Dynamic Library Loader dependency, pthread, uuid (if UNIX-based)
 if( ${MONADIC_CURRENT_SYSTEM} STREQUAL "LINUX" )
